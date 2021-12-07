@@ -1,13 +1,34 @@
 const express = require('express');
+// const header_middleware = require("./middlewares/header");
+// const app = express();
+// // const cors = require('cors');
+// app.use(header_middleware);
+// const bodyParser = require("body-parser"); /* deprecated */
+const header_middleware = require("./middlewares/header");
+const cors = require('cors');
+
 const app = express();
+
+var corsOptions = {
+  origin: "http://localhost:8080"
+};
+
+app.use(cors());
+
+// parse requests of content-type - application/json
+app.use(express.json());  /* bodyParser.json() is deprecated */
+app.use(header_middleware);
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
 const {
     addOrUpdateCharacter,
     getCharacters,
     deleteCharacter,
     getCharacterById,
-} = require('./dynamo');
-
-app.use(express.json());
+} = require('./dynamo1');
+// app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('Hello World');
@@ -16,7 +37,7 @@ app.get('/', (req, res) => {
 app.get('/characters', async (req, res) => {
     try {
         const characters = await getCharacters();
-        res.json(characters);
+        res.send(characters);
     } catch (err) {
         console.error(err);
         res.status(500).json({ err: 'Something went wrong' });
@@ -68,7 +89,7 @@ app.delete('/characters/:id', async (req, res) => {
     }
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`listening on port port`);
 });
