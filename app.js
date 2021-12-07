@@ -9,10 +9,6 @@ const cors = require('cors');
 
 const app = express();
 
-var corsOptions = {
-  origin: "http://localhost:8080"
-};
-
 app.use(cors());
 
 // parse requests of content-type - application/json
@@ -91,5 +87,5 @@ app.delete('/characters/:id', async (req, res) => {
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    console.log(`listening on port port`);
+    console.log(`Server is running on port ${port}.`);
 });
