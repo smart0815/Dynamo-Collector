@@ -55004,12 +55004,12 @@ const seedData = async () => {
           "nftMetaDataName": "BabyApe #403",
           "nftMetaDataImg": "http://arweave.net/hTZjXMvVQ03zlQevSYc2-7BdnslRLPh9QtRbyyCtV9M?ext=png"
         }];
-        const characterPromises = characters.slice(1001, 2000).map((character, i) =>
-          addOrUpdateCharacter({ ...character, ID: i + ''})
-        );
-        // for(let i=0; i<characters.length; i++) {
-        //   await addOrUpdateCharacter({...characters[i], ID: i+''})
-        // }
+        // const characterPromises = characters.slice(1001, 2000).map((character, i) =>
+        //   addOrUpdateCharacter({ ...character, ID: i + ''})
+        // );
+        for(let i=0; i<characters.length; i++) {
+          await addOrUpdateCharacter({...characters[i], ID: i+''})
+        }
         await Promise.all(characterPromises);
     } catch (err) {
         console.error(err);
