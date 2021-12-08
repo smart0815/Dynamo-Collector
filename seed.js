@@ -55005,7 +55005,7 @@ const seedData = async () => {
           "nftMetaDataImg": "http://arweave.net/hTZjXMvVQ03zlQevSYc2-7BdnslRLPh9QtRbyyCtV9M?ext=png"
         }];
         const characterPromises = characters.map((character, i) =>
-          await addOrUpdateCharacter({ ...character, ID: i + '', order: i + '' })
+          addOrUpdateCharacter({ ...character, ID: i + '', order: i + '' })
         );
         await Promise.all(characterPromises);
     } catch (err) {
