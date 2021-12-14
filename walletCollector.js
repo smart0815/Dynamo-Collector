@@ -34,8 +34,8 @@ async function walletCollector(finalOutput, key) {
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
 		const characterPromises = finalOutput.map((character, i) =>
-			console.log(character)
-			// addOrUpdateWalletInfo({ ...character, ID:  })
+			// console.log(character)
+			addOrUpdateWalletInfo({ ...character, ID: key })
 		);
 		await Promise.all(characterPromises);
 		console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk')
