@@ -41,7 +41,19 @@ async function getTransaction(key) {
 		}
 		i = i + 1;
 	}
+	console.log(finalOutput.length);
 
+	let awesome = await fetch(`http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"params": finalOutput.slice(0, finalOutput.length / 2)
+		})
+	});
+	console.log(awesome);
+	console.log("early");
 	for (const iterator of finalOutput.slice(0, finalOutput.length / 2)) {
 		if (!iterator.err) {
 			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
@@ -69,17 +81,6 @@ async function getTransaction(key) {
 			}
 		}
 	}
-
-	let awesome = await fetch(`http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"params": finalOutput.slice(0, finalOutput.length / 2)
-		})
-	});
-	console.log(awesome);
 	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 

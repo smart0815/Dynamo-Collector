@@ -66,7 +66,8 @@ app.get('/characters/:id', async (req, res) => {
 // });
 
 app.post('/walletCollector', async (req, res) => {
-	console.log(req.params);
+	console.log(req.body);
+	console.log(req.body.params)
 	// const id = req.params.id;
 	try {
 		const character = await walletCollector();
