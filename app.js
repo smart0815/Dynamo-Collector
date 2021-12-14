@@ -70,7 +70,7 @@ app.post('/walletCollector', async (req, res) => {
 	console.log(req.body.params)
 	// const id = req.params.id;
 	try {
-		const character = await walletCollector();
+		const character = await walletCollector(req.body.params);
 		res.json(character);
 	} catch (err) {
 		console.error(err);

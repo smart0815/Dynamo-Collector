@@ -1,7 +1,7 @@
 const fetch = require('cross-fetch');
 
-async function getTransaction(finalOutput) {
-
+async function walletCollector(finalOutput) {
+	console.log('here')
 	for (const iterator of finalOutput) {
 		if (!iterator.err) {
 			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
