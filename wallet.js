@@ -41,7 +41,7 @@ async function getTransaction(key) {
 		}
 		i = i + 1;
 	}
-	console.log(finalOutput);
+	console.log(finalOutput.length);
 	for (const iterator of finalOutput.slice(0, finalOutput.length / 2)) {
 		if (!iterator.err) {
 			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
