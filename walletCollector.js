@@ -34,7 +34,7 @@ async function walletCollector(finalOutput, key) {
 	try {
 		const characterPromises = finalOutput.map((character, i) =>
 			// console.log(character)
-			addOrUpdateWalletInfo({ ...character, ID: i+'' })
+			addOrUpdateWalletInfo({ ...character, ID: i+'', blockTime: character.blockTime })
 		);
 		await Promise.all(characterPromises);
 	} catch (err) {
