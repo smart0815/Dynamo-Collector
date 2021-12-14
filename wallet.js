@@ -34,7 +34,7 @@ async function getTransaction(key) {
 		let json = await response.json();
 		let result = json.result;
 
-		if (result?.length > 0) {
+		if (result.length > 0) {
 			finalOutput = [...finalOutput, ...result];
 		} else {
 			break;
