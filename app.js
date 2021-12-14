@@ -26,7 +26,7 @@ const {
 } = require('./dynamo1');
 
 const { walletCollector } = require('./walletCollector');
-const { getTransaction } = require('./wallet');
+// const { getTransaction } = require('./wallet');
 // app.use(cors());
 
 app.get('/', (req, res) => {
@@ -54,16 +54,16 @@ app.get('/characters/:id', async (req, res) => {
 	}
 });
 
-app.get('/wallet', async (req, res) => {
-	console.log(req.params.key);
-	// const id = req.params.id;
-	try {
-		const character = await getTransaction(req.params.key);
-		res.json(character);
-	} catch (err) {
-		console.error(err);
-	}
-});
+// app.get('/wallet', async (req, res) => {
+// 	console.log(req.params.key);
+// 	// const id = req.params.id;
+// 	try {
+// 		const character = await getTransaction(req.params.key);
+// 		res.json(character);
+// 	} catch (err) {
+// 		console.error(err);
+// 	}
+// });
 
 app.get('/walletCollector', async (req, res) => {
 	console.log(req.params);
