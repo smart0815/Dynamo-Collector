@@ -1,4 +1,5 @@
 const fetch = require('cross-fetch');
+const { addOrUpdateWalletInfo } = require('./dynamo1');
 
 async function walletCollector(finalOutput, key) {
 	console.log('here')
@@ -30,8 +31,18 @@ async function walletCollector(finalOutput, key) {
 		}
 	}
 	console.log('finalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinal')
+	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 
-	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+	try {
+		const characterPromises = finalOutput.map((character, i) =>
+			console.log(character)
+			// addOrUpdateWalletInfo({ ...character, ID:  })
+		);
+		await Promise.all(characterPromises);
+	} catch (err) {
+		console.error(err);
+		console.log('AHHHHHHHHHHH');
+	}
 }
 
 module.exports = {
