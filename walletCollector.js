@@ -30,13 +30,16 @@ async function walletCollector(finalOutput, key) {
 			}
 		}
 	}
+	const array = [];
+	array.character = character;
+	array.key = key;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
-		const characterPromises = finalOutput.map((character, i) =>
-			// console.log(character)
-			addOrUpdateWalletInfo({ ...character, ID: i+'', blockTime: character.blockTime })
-		);
-		await Promise.all(characterPromises);
+		// const characterPromises = finalOutput.map((character, i) =>
+		// 	// console.log(character)
+			addOrUpdateWalletInfo(array)
+		// );
+		// await Promise.all(characterPromises);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
