@@ -32,7 +32,7 @@ async function walletCollector(finalOutput, key) {
 	}
 	const array = [];
 	array.finalOutput = finalOutput;
-	array.key = key;
+	array.ID = key;
 	// console.log(array);
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
