@@ -32,15 +32,13 @@ async function walletCollector(finalOutput, key) {
 	}
 	console.log('finalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinal')
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
-
 	try {
 		const characterPromises = finalOutput.map((character, i) =>
-			console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk'),
-			console.log(character),
-			console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk')
+			console.log(character)
 			// addOrUpdateWalletInfo({ ...character, ID:  })
 		);
 		await Promise.all(characterPromises);
+		console.log('kkkkkkkkkkkkkkkkkkkkkkkkkk')
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
