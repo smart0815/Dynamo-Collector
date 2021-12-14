@@ -1,3 +1,5 @@
+const fetch = require('cross-fetch');
+
 async function getTransaction(finalOutput) {
 
 	for (const iterator of finalOutput) {

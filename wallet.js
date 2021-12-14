@@ -1,5 +1,5 @@
-import fetch from "node-fetch";
-
+// import fetch from "node-fetch";
+const fetch = require('cross-fetch');
 async function getResults(before, key) {
 	const response = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
 		method: 'POST',
