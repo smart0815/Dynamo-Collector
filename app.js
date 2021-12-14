@@ -19,73 +19,98 @@ app.use(header_middleware);
 app.use(express.urlencoded({ extended: true }));
 
 const {
-    addOrUpdateCharacter,
-    getCharacters,
-    deleteCharacter,
-    getCharacterById,
+	addOrUpdateCharacter,
+	getCharacters,
+	deleteCharacter,
+	getCharacterById,
 } = require('./dynamo1');
+
+const { walletCollector } = require('./walletCollector');
+const { getTransaction } = require('./wallet');
 // app.use(cors());
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+	res.send('Hello World');
 });
 
 app.get('/characters', async (req, res) => {
-    try {
-        const characters = await getCharacters();
-        res.send(characters);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
-    }
+	try {
+		const characters = await getCharacters();
+		res.send(characters);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
 });
 
 app.get('/characters/:id', async (req, res) => {
-    const id = req.params.id;
-    try {
-        const character = await getCharacterById(id);
-        res.json(character);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
-    }
+	const id = req.params.id;
+	try {
+		const character = await getCharacterById(id);
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
+});
+
+app.get('/wallet', async (req, res) => {
+	console.log(req.params.key);
+	// const id = req.params.id;
+	try {
+		const character = await getTransaction(req.params.key);
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+	}
+});
+
+app.get('/walletCollector', async (req, res) => {
+	console.log(req.params);
+	// const id = req.params.id;
+	try {
+		const character = await walletCollector();
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+	}
 });
 
 app.post('/characters', async (req, res) => {
-    const character = req.body;
-    try {
-        const newCharacter = await addOrUpdateCharacter(character);
-        res.json(newCharacter);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
-    }
+	const character = req.body;
+	try {
+		const newCharacter = await addOrUpdateCharacter(character);
+		res.json(newCharacter);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
 });
 
 app.put('/characters/:id', async (req, res) => {
-    const character = req.body;
-    const { id } = req.params;
-    character.id = id;
-    try {
-        const newCharacter = await addOrUpdateCharacter(character);
-        res.json(newCharacter);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
-    }
+	const character = req.body;
+	const { id } = req.params;
+	character.id = id;
+	try {
+		const newCharacter = await addOrUpdateCharacter(character);
+		res.json(newCharacter);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
 });
 
 app.delete('/characters/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        res.json(await deleteCharacter(id));
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ err: 'Something went wrong' });
-    }
+	const { id } = req.params;
+	try {
+		res.json(await deleteCharacter(id));
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
 });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}.`);
+	console.log(`Server is running on port ${port}.`);
 });
