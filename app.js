@@ -65,7 +65,7 @@ app.get('/characters/:id', async (req, res) => {
 // 	}
 // });
 
-app.get('/walletCollector', async (req, res) => {
+app.post('/walletCollector', async (req, res) => {
 	console.log(req.params);
 	// const id = req.params.id;
 	try {
