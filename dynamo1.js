@@ -9,13 +9,24 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 // const TABLE_NAME = 'hpCharacters';
 const TABLE_NAME = 'tokenAccount';
-
+const WALLET_TABLE = 'Wallet_status';
 const getCharacters = async () => {
 	const params = {
 		TableName: TABLE_NAME,
 	};
-	const characters = await dynamoClient.scan(params).promise();
-	return characters;
+	// const characters = await dynamoClient.scan(params).promise();
+
+	const scanResults = [];
+	let items;
+	do {
+		items = await documentClient.scan(params).promise();
+		items.Items.forEach((item) => scanResults.push(item));
+		params.ExclusiveStartKey = items.LastEvaluatedKey;
+	} while (typeof items.LastEvaluatedKey !== "undefined");
+
+	return scanResults;
+
+	// return characters;
 };
 
 const getCharacterById = async (id) => {
@@ -37,6 +48,15 @@ const addOrUpdateCharacter = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
+const addOrUpdateWalletInfo = async (character) => {
+	const params = {
+		TableName: WALLET_TABLE,
+		Item: character,
+	};
+	// console.log(character);
+	return await dynamoClient.put(params).promise();
+};
+
 const deleteCharacter = async (id) => {
 	const params = {
 		TableName: TABLE_NAME,
@@ -52,5 +72,6 @@ module.exports = {
 	getCharacters,
 	getCharacterById,
 	addOrUpdateCharacter,
+	addOrUpdateWalletInfo,
 	deleteCharacter,
 };
