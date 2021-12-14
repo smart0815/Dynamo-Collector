@@ -71,7 +71,7 @@ async function getTransaction(key) {
 	}
 
 	let awesome = await fetch(`http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector`, {
-		method: 'get',
+		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 		},
