@@ -29,6 +29,7 @@ async function walletCollector(finalOutput, key) {
 			}
 		}
 	}
+	console.log('finalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinalfinal')
 	console.log(finalOutput);
 	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }

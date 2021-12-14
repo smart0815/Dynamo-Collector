@@ -53,7 +53,7 @@ async function getTransaction(key) {
 			"params": finalOutput.slice(0, finalOutput.length / 2)
 		})
 	});
-	conwsole.log(awesome);
+	console.log(awesome);
 	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
 	for (const iterator of finalOutput.slice(0, finalOutput.length / 2)) {
 		if (!iterator.err) {
