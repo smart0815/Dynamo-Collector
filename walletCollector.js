@@ -38,8 +38,9 @@ async function walletCollector(finalOutput, key) {
 		const characterPromises = array.map((character, i) =>
 			// 	// console.log(character)
 			// addOrUpdateWalletInfo(array)
-			addOrUpdateWalletInfo({ ...character, id: i + '' })
+			addOrUpdateWalletInfo({ ...character, ID: i + '' })
 		);
+		console.log('nnnnnnnnnnnn');
 		await Promise.all(characterPromises);
 	} catch (err) {
 		console.error(err);
