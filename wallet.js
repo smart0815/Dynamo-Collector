@@ -54,7 +54,6 @@ async function getTransaction(key) {
 		})
 	});
 	console.log(awesome);
-	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
 	for (const iterator of finalOutput.slice(0, finalOutput.length / 2)) {
 		if (!iterator.err) {
 			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
@@ -82,6 +81,7 @@ async function getTransaction(key) {
 			}
 		}
 	}
+	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
 	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 
