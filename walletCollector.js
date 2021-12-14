@@ -32,3 +32,7 @@ async function walletCollector(finalOutput) {
 	console.log(finalOutput);
 	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
+
+module.exports = {
+	walletCollector,
+};
