@@ -1,6 +1,6 @@
 const fetch = require('cross-fetch');
 
-async function walletCollector(finalOutput) {
+async function walletCollector(finalOutput, key) {
 	console.log('here')
 	for (const iterator of finalOutput) {
 		if (!iterator.err) {

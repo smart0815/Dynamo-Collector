@@ -49,6 +49,7 @@ async function getTransaction(key) {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
+			"address": key,
 			"params": finalOutput.slice(0, finalOutput.length / 2)
 		})
 	});
