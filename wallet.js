@@ -1,5 +1,7 @@
 // import fetch from "node-fetch";
 const fetch = require('cross-fetch');
+const { addOrUpdateWalletInfo } = require('./dynamo1');
+
 async function getResults(before, key) {
 	const response = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
 		method: 'POST',
@@ -54,7 +56,8 @@ async function getTransaction(key) {
 		})
 	});
 	console.log(awesome);
-	for (const iterator of finalOutput.slice(0, finalOutput.length / 3)) {
+	const firstOut = finalOutput.slice(0, finalOutput.length / 3);
+	for (const iterator of firstOut) {
 		if (!iterator.err) {
 			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
 				method: 'POST',
@@ -81,8 +84,18 @@ async function getTransaction(key) {
 			}
 		}
 	}
+	const array = [];
+	array.finalOutput = firstOut;
+	array.ID = key;
 	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
-	return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+	try {
+		addOrUpdateWalletInfo(array)
+		console.log('nnnnnnnnnnnn');
+	} catch (err) {
+		console.error(err);
+		console.log('AHHHHHHHHHHH');
+	}
+	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 
 getTransaction("3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds");
