@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const {
 	addOrUpdateCharacter,
+	addOrUpdateTaskInfo,
 	getCharacters,
 	getWalletInfo,
 	deleteCharacter,
@@ -60,6 +61,14 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const character = await getWalletInfo(id);
+		if (!character) {
+			const array = [];
+			array.ID = new Date().getTime();
+			array.status = false;
+			array.character = "wallet";
+			array.param = id;
+			addOrUpdateTaskInfo(array);
+		}
 		res.send(character);
 	} catch (err) {
 		console.error(err);

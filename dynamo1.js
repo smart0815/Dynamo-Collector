@@ -10,6 +10,7 @@ const dynamoClient = new AWS.DynamoDB.DocumentClient();
 // const TABLE_NAME = 'hpCharacters';
 const TABLE_NAME = 'tokenAccount';
 const WALLET_TABLE = 'Wallet_status';
+const TASK_TABLE = 'task_status';
 
 const getCharacters = async () => {
 	const params = {
@@ -54,7 +55,14 @@ const addOrUpdateWalletInfo = async (character) => {
 		TableName: WALLET_TABLE,
 		Item: character,
 	};
-	// console.log(character);
+	return await dynamoClient.put(params).promise();
+};
+
+const addOrUpdateTaskInfo = async (character) => {
+	const params = {
+		TableName: TASK_TABLE,
+		Item: character,
+	};
 	return await dynamoClient.put(params).promise();
 };
 
@@ -95,5 +103,6 @@ module.exports = {
 	getWalletInfo,
 	addOrUpdateCharacter,
 	addOrUpdateWalletInfo,
+	addOrUpdateTaskInfo,
 	deleteCharacter,
 };
