@@ -84,14 +84,17 @@ const getWalletInfo = async (address) => {
 		},
 	};
 
-	// dynamoClient.scan(params, function(err, data) {
-	// 	// console.log(data);
-	// 	walletData = data;
-	// });
-	// console.log("==============sure=================")
-	// console.log(walletData);
-	// return walletData;
-	return await dynamoClient.get(params).promise();
+	var walletData;
+	dynamoClient.scan(params, function (err, data) {
+		console.log("==============really?=================")
+		console.log(data);
+		console.log("==============really?=================")
+		walletData = data;
+	});
+	console.log("==============sure=================")
+	console.log(walletData);
+	return walletData;
+	// return await dynamoClient.scan(params).promise();
 };
 
 module.exports = {
