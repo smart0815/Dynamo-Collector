@@ -10,6 +10,7 @@ const dynamoClient = new AWS.DynamoDB.DocumentClient();
 // const TABLE_NAME = 'hpCharacters';
 const TABLE_NAME = 'tokenAccount';
 const WALLET_TABLE = 'Wallet_status';
+
 const getCharacters = async () => {
 	const params = {
 		TableName: TABLE_NAME,
@@ -83,10 +84,13 @@ const getWalletInfo = async (address) => {
 		},
 	};
 
+	const walletData;
 	dynamoClient.scan(params, function(err, data) {
-		console.log(data);
-		return data.item;
+		// console.log(data);
+		walletData = data;
 	});
+	console.log("==============sure=================")
+	return walletData;
 	// return await dynamoClient.get(params).promise();
 };
 
