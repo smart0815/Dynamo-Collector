@@ -60,9 +60,6 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const character = await getWalletInfo(id);
-		console.log("==============status===========");
-		console.log(character);
-		console.log("==============status===========");
 		res.send(character);
 	} catch (err) {
 		console.error(err);
