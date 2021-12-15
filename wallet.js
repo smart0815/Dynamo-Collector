@@ -45,6 +45,7 @@ async function getTransaction(key) {
 	}
 	console.log(finalOutput.length);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length % 2 : finalOutput.length % 2 + 0.5;
+	console.log(count);
 	let awesome = await fetch(`http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/`, {
 		method: 'POST',
 		headers: {
