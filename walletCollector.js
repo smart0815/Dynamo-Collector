@@ -1,26 +1,44 @@
 const fetch = require('cross-fetch');
 const { addOrUpdateWalletInfo } = require('./dynamo1');
 
+let milliseconds = 11000;
+const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
+
 async function walletCollector(finalOutput, key) {
 	console.log('here')
+	let signatureBalance;
+	let balance;
 	for (const iterator of finalOutput) {
 		if (!iterator.err) {
-			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					"jsonrpc": "2.0",
-					"id": 1,
-					"method": "getTransaction",
-					"params": [
-						iterator.signature,
-						"json"
-					]
-				})
-			});
-			const balance = await signatureBalance.json();
+			for (let i = 0; i < 4; i++) {
+				try {
+					signatureBalance = await fetch(`${MAINNET_URL_API}`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							"jsonrpc": "2.0",
+							"id": 1,
+							"method": "getTransaction",
+							"params": [
+								iterator.signature,
+								"json"
+							]
+						})
+					});
+					balance = await signatureBalance.json();
+					if (balance.result === null) {
+						await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+						continue;
+					} else {
+						break;
+					}
+				} catch {
+					await delay(milliseconds);
+					continue;
+				}
+			}
 			let index;
 			if (balance) {
 				if (balance["result"]) {
@@ -39,7 +57,7 @@ async function walletCollector(finalOutput, key) {
 	try {
 		// const characterPromises = array.map((character, i) =>
 		addOrUpdateWalletInfo(array)
-			// addOrUpdateWalletInfo({ ...character, ID: i + '' })
+		// addOrUpdateWalletInfo({ ...character, ID: i + '' })
 		// );
 		console.log('nnnnnnnnnnnn');
 		// await Promise.all(characterPromises);
@@ -47,6 +65,10 @@ async function walletCollector(finalOutput, key) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
 	}
+}
+
+function delay(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 module.exports = {

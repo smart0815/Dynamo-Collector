@@ -2,8 +2,12 @@
 const fetch = require('cross-fetch');
 const { addOrUpdateWalletInfo } = require('./dynamo1');
 
+let milliseconds = 11000;
+const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
+const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/";
+
 async function getResults(before, key) {
-	const response = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
+	const response = await fetch(`${MAINNET_URL_API}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ async function getTransaction(key) {
 	console.log(finalOutput.length);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 	console.log(count);
-	let awesome = await fetch(`http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/`, {
+	let awesome = await fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -58,30 +62,43 @@ async function getTransaction(key) {
 	});
 	console.log(awesome);
 	const firstOut = finalOutput.slice(count, finalOutput.length);
+	let signatureBalance;
+	let balance;
 	for (const iterator of firstOut) {
 		if (!iterator.err) {
-			let signatureBalance = await fetch(`https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					"jsonrpc": "2.0",
-					"id": 1,
-					"method": "getTransaction",
-					"params": [
-						iterator.signature,
-						"json"
-					]
-				})
-			});
-			const balance = await signatureBalance.json();
+			for (let i = 0; i < 4; i++) {
+				try {
+					signatureBalance = await fetch(`${MAINNET_URL_API}`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							"jsonrpc": "2.0",
+							"id": 1,
+							"method": "getTransaction",
+							"params": [
+								iterator.signature,
+								"json"
+							]
+						})
+					});
+					balance = await signatureBalance.json();
+					if (balance.result === null) {
+						await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+						continue;
+					} else {
+						break;
+					}
+				} catch {
+					await delay(milliseconds);
+					continue;
+				}
+			}
 			let index;
 			if (balance) {
-				if (balance["result"]) {
-					index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-					iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
-				}
+				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
+				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
 		}
 	}
@@ -100,4 +117,7 @@ async function getTransaction(key) {
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 
+function delay(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
 getTransaction("3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds");
