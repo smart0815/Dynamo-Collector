@@ -67,10 +67,30 @@ const deleteCharacter = async (id) => {
 	return await dynamoClient.delete(params).promise();
 };
 
+const getWalletInfo = async (address) => {
+	var params = {
+		TableName: WALLET_TABLE,
+		KeyConditionExpression: "#cat = :findValue",
+		FilterExpression: '#cat = :findValue',
+		ExpressionAttributeNames: {
+			'#cat': 'address',
+		},
+		ExpressionAttributeValues: {
+			':findValue': address,
+		},
+	};
+
+	dynamoClient.scan(params, function(err, data) {
+		console.log(data);
+	});
+	// return await dynamoClient.get(params).promise();
+};
+
 module.exports = {
 	dynamoClient,
 	getCharacters,
 	getCharacterById,
+	getWalletInfo,
 	addOrUpdateCharacter,
 	addOrUpdateWalletInfo,
 	deleteCharacter,
