@@ -84,7 +84,7 @@ const getWalletInfo = async (address) => {
 		},
 	};
 
-	const walletData;
+	var walletData;
 	dynamoClient.scan(params, function(err, data) {
 		// console.log(data);
 		walletData = data;
