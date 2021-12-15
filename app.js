@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 const {
 	addOrUpdateCharacter,
 	getCharacters,
+	getWalletInfo,
 	deleteCharacter,
 	getCharacterById,
 } = require('./dynamo1');
@@ -47,6 +48,21 @@ app.get('/characters/:id', async (req, res) => {
 	const id = req.params.id;
 	try {
 		const character = await getCharacterById(id);
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
+});
+
+app.get('/walletInfo/:id', async (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+	try {
+		const character = await getWalletInfo(id);
+		console.log("==============status===========");
+		console.log(character);
+		console.log("==============status===========");
 		res.json(character);
 	} catch (err) {
 		console.error(err);
