@@ -68,6 +68,9 @@ const deleteCharacter = async (id) => {
 };
 
 const getWalletInfo = async (address) => {
+	console.log("===============come here===================");
+	console.log(address);
+	console.log("===============come here===================");
 	var params = {
 		TableName: WALLET_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
