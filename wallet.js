@@ -86,8 +86,8 @@ async function getTransaction(key) {
 	}
 	const array = [];
 	array.finalOutput = firstOut;
-	array.address = key;
 	array.ID = new Date().getTime();
+	array.address = key;
 	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
 	try {
 		addOrUpdateWalletInfo(array)
