@@ -63,7 +63,7 @@ app.get('/walletInfo/:id', async (req, res) => {
 		console.log("==============status===========");
 		console.log(character);
 		console.log("==============status===========");
-		res.json(character);
+		res.send(character);
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ err: 'Something went wrong' });
