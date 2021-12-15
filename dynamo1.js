@@ -90,6 +90,7 @@ const getWalletInfo = async (address) => {
 		walletData = data;
 	});
 	console.log("==============sure=================")
+	console.log(walletData);
 	return walletData;
 	// return await dynamoClient.get(params).promise();
 };
