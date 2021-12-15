@@ -61,6 +61,9 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const character = await getWalletInfo(id);
+		console.log("mmmmmmmmmmmmmmm");
+		console.log(character);
+		console.log("mmmmmmmmmmmmmmm");
 		if (!character) {
 			const array = [];
 			array.ID = new Date().getTime();
