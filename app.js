@@ -22,7 +22,7 @@ app.use(header_middleware);
 // // app.use(bodyParser.json({limit: '50mb'}));
 // // app.use(express.json({limit:'50mb'}));
 // // app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-c// app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
+// app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
 // app.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoding' }));
 // parse requests of content-type - application/x-www-form-urlencoded
 // app.use(express.urlencoded({ extended: true }));
