@@ -47,20 +47,11 @@ async function getTransaction(key) {
 		}
 		i = i + 1;
 	}
-	console.log(finalOutput.length);
+	console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	console.log(count);
-	let awesome = await fetch(`${SERVER_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(0, count)
-		})
-	});
-	console.log(awesome);
+
+	collector1(key, count);
+
 	const firstOut = finalOutput.slice(count, finalOutput.length);
 	let signatureBalance;
 	let balance;
@@ -114,10 +105,30 @@ async function getTransaction(key) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
 	}
+
+	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+}
+
+async function collector1(key, count) {
+	await fetch(`${SERVER_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"address": key,
+			"params": finalOutput.slice(0, count)
+		})
+	});
 }
 
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+module.exports = {
+	getTransaction,
+};
+
 getTransaction("3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds");
