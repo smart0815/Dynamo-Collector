@@ -11,12 +11,9 @@ const app = express();
 
 app.use(cors());
 // parse requests of content-type - application/json
-// app.use(express.json());  /* bodyParser.json() is deprecated */
 const bodyParser = require('body-parser');
 
 app.use(header_middleware);
-//The default request size is 100kb in body-parser
-// var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 // app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
