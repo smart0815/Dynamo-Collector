@@ -13,8 +13,8 @@ app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());  /* bodyParser.json() is deprecated */
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.json());
 
 app.use(header_middleware);
 //The default request size is 100kb in body-parser
