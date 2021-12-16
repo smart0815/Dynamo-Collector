@@ -50,7 +50,7 @@ async function getTransaction(key) {
 	console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 
-	collector1(key, count);
+	collector1(finalOutput, key, count);
 
 	const firstOut = finalOutput.slice(count, finalOutput.length);
 	let signatureBalance;
@@ -110,7 +110,7 @@ async function getTransaction(key) {
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 
-async function collector1(key, count) {
+async function collector1(finalOutput, key, count) {
 	await fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
