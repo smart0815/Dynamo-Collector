@@ -15,6 +15,10 @@ app.use(cors());
 app.use(express.json());  /* bodyParser.json() is deprecated */
 app.use(header_middleware);
 
+//The default request size is 100kb in body-parser
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
+
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
@@ -61,9 +65,7 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const character = await getWalletInfo(id);
-		console.log("mmmmmmmmmmmmmmm");
 		console.log(character);
-		console.log("mmmmmmmmmmmmmmm");
 		if (!character.Items.length) {
 			const array = [];
 			array.ID = new Date().getTime();
