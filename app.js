@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+console.log(bodyParser);
 // const header_middleware = require("./middlewares/header");
 // const app = express();
 // // const cors = require('cors');
@@ -11,7 +13,6 @@ const app = express();
 
 app.use(cors());
 // parse requests of content-type - application/json
-const bodyParser = require('body-parser');
 
 app.use(header_middleware);
 app.use(bodyParser.json({ limit: '50mb' }));
