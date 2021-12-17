@@ -93,6 +93,10 @@ app.get('/walletInfo/:id', async (req, res) => {
 
 app.post('/walletCollector', async (req, res) => {
 	console.log("kkkkkkkkk");
+	app.use(bodyParser.json());
+	app.use(bodyParser.json({ limit: '50mb' }));
+	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+
 	console.log(req.body);
 	console.log(req.body.params)
 	// const id = req.params.id;
