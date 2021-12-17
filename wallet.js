@@ -111,7 +111,7 @@ async function getTransaction(key) {
 }
 
 async function collector1(finalOutput, key, count) {
-	await fetch(`${SERVER_URL_API}`, {
+	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ async function collector1(finalOutput, key, count) {
 			"address": key,
 			"params": finalOutput.slice(0, count)
 		})
-	});
+	}).catch(err => console.error(err));
 }
 
 function delay(ms) {
