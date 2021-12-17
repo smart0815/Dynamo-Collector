@@ -1,11 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-console.log(bodyParser);
 // const header_middleware = require("./middlewares/header");
 // const app = express();
 // // const cors = require('cors');
 // app.use(header_middleware);
-// const bodyParser = require("body-parser"); /* deprecated */
 const header_middleware = require("./middlewares/header");
 const cors = require('cors');
 
@@ -13,10 +11,11 @@ const app = express();
 
 app.use(cors());
 // parse requests of content-type - application/json
-
-app.use(header_middleware);
+console.log(bodyParser.json());
+app.use(bodyParser.json());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+app.use(header_middleware);
 // app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
 // app.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoding' }));
 // parse requests of content-type - application/x-www-form-urlencoded
