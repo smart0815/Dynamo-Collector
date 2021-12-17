@@ -19,11 +19,6 @@ const getFlagStatus = async () => {
 	const params = {
 		TableName: FLAG_TABLE
 	};
-
-	// var flagInfo =  await dynamoClient.scan(params).promise();
-	// status = flagInfo.Items[0]["Flag"]
-	// console.log(status);
-	// console.log(aa.Items[0]["Flag"]);
 	return await dynamoClient.scan(params).promise();
 };
 
@@ -32,7 +27,6 @@ const updateFlagStatus = async (character) => {
 		TableName: FLAG_TABLE,
 		Item: character,
 	};
-	// console.log(character);
 	return await dynamoClient.put(params).promise();
 };
 
@@ -40,30 +34,30 @@ const getTaskInfo = async (address) => {
 	const status = await getFlagStatus();
 	console.log(status);
 
-	var params = {
-		TableName: TASK_TABLE,
-		KeyConditionExpression: "#cat = :findValue",
-		FilterExpression: '#cat = :findValue',
-		ExpressionAttributeNames: {
-			'#cat': 'status',
-		},
-		ExpressionAttributeValues: {
-			':findValue': address,
-		},
-	};
+	// var params = {
+	// 	TableName: TASK_TABLE,
+	// 	KeyConditionExpression: "#cat = :findValue",
+	// 	FilterExpression: '#cat = :findValue',
+	// 	ExpressionAttributeNames: {
+	// 		'#cat': 'status',
+	// 	},
+	// 	ExpressionAttributeValues: {
+	// 		':findValue': address,
+	// 	},
+	// };
 
-	var taskInfo = await dynamoClient.scan(params).promise();
-	console.log(taskInfo);
-	if (taskInfo && status.Items[0]["Flag"]) {
-		if (taskInfo.Items[0].character == 'wallet') {
-			var arr = [];
-			arr.ID = 1;
-			arr.Flag = true;
-			updateFlagStatus(arr);
-			getTransaction(taskInfo.Items[0].param);
-			console.log("really?");
-		}
-	}
+	// var taskInfo = await dynamoClient.scan(params).promise();
+	// console.log(taskInfo);
+	// if (taskInfo && status.Items[0]["Flag"]) {
+	// 	if (taskInfo.Items[0].character == 'wallet') {
+	// 		var arr = [];
+	// 		arr.ID = 1;
+	// 		arr.Flag = true;
+	// 		updateFlagStatus(arr);
+	// 		getTransaction(taskInfo.Items[0].param);
+	// 		console.log("really?");
+	// 	}
+	// }
 };
 
 getTaskInfo(false);
