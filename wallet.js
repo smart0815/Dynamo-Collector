@@ -98,6 +98,7 @@ async function getTransaction(key) {
 			}
 			let index;
 			if (balance) {
+				console.log(balance);
 				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
 				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
