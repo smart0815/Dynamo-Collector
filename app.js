@@ -14,7 +14,7 @@ app.use(cors());
 const bodyParser = require('body-parser');
 
 app.use(header_middleware);
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 // app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }));
 // app.use(bodyParser.urlencoded({ extended: true, limit: 1024 * 1024 * 50, type: 'application/x-www-form-urlencoding' }));
@@ -91,10 +91,10 @@ app.get('/walletInfo/:id', async (req, res) => {
 // 	}
 // });
 
-app.post('/walletCollector', async (req, res) => {	
+app.post('/walletCollector', async (req, res) => {
+	console.log("kkkkkkkkk");
 	console.log(req.body);
 	console.log(req.body.params)
-
 	// const id = req.params.id;
 	try {
 		const character = await walletCollector(req.body.params, req.body.address);
