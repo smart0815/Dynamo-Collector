@@ -17,10 +17,6 @@ headers.use((req, res, next) => {
 		"Access-Control-Allow-Methods",
 		"GET, POST, PATCH,PUT, DELETE, OPTIONS"
 	);
-	res.bodyParser(
-		"body-parser#json"= { "params" : { "limit" : "50mb"} },
-		"body-parser#urlencoded"= {"params": { "limit" : "50mb", "extended": true }}
-	)
 	next();
 });
 
