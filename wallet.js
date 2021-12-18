@@ -121,19 +121,6 @@ async function getTransaction(key) {
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
 
-async function collector1(finalOutput, key, count) {
-	fetch(`${SERVER_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(0, count)
-		})
-	}).catch(err => console.error(err));
-}
-
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -141,5 +128,3 @@ function delay(ms) {
 module.exports = {
 	getTransaction,
 };
-
-getTransaction("J3dwngT2du9yr9cEZ2n9h9SD7NnQWnwtQvySYMm81M5J");
