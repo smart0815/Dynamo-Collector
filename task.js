@@ -52,10 +52,9 @@ const getTaskInfo = async (address) => {
 		if (taskInfo.Items[0].character == 'wallet') {
 			var arr = [];
 			arr.ID = 1;
-			arr.Flag = true;
+			arr.Flag = false;
 			updateFlagStatus(arr);
 			getTransaction(taskInfo.Items[0].param);
-			console.log("really?");
 		}
 	}
 };
