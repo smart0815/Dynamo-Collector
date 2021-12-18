@@ -1,1 +1,1 @@
-node task.js
+node /var/crontab/task.js
