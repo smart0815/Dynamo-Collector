@@ -57,7 +57,7 @@ async function walletCollector(finalOutput, key) {
 	}
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
-		const chunks = chunk(firstOut, 1000);
+		const chunks = chunk(finalOutput, 1000);
 		for (const iterator of chunks) {
 			const array = [];
 			array.finalOutput = iterator;
