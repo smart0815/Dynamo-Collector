@@ -27,7 +27,7 @@ app.use(header_middleware);
 
 const {
 	addOrUpdateCharacter,
-	addOrUpdateTaskInfo,
+	addUpdateTask,
 	getCharacters,
 	getWalletInfo,
 	deleteCharacter,
@@ -75,7 +75,7 @@ app.get('/walletInfo/:id', async (req, res) => {
 			array.status = false;
 			array.character = "wallet";
 			array.param = id;
-			addOrUpdateTaskInfo(array);
+			addUpdateTask(array);
 		}
 		res.send(character);
 	} catch (err) {

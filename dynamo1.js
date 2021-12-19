@@ -55,6 +55,15 @@ const addOrUpdateWalletInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
+
+const updateFlagStatus = async (character) => {
+	const params = {
+		TableName: FLAG_TABLE,
+		Item: character,
+	};
+	return await dynamoClient.put(params).promise();
+};
+
 const addUpdateTask = async (character) => {
 	const params = {
 		TableName: TASK_TABLE,
@@ -124,5 +133,6 @@ module.exports = {
 	addOrUpdateWalletInfo,
 	addUpdateTask,
 	updateTaskInfo,
+	updateFlagStatus,
 	deleteCharacter,
 };
