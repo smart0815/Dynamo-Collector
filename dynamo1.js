@@ -85,7 +85,7 @@ const updateTaskInfo = async (character) => {
 		},
 	};
 
-	var updateParam= await dynamoClient.scan(params).promise();
+	var updateParam = await dynamoClient.scan(params).promise();
 	updateParam.Items[0].status = true;
 	addUpdateTask(updateParam.Items[0]);
 };
@@ -112,7 +112,6 @@ const getWalletInfo = async (address) => {
 			':findValue': address,
 		},
 	};
-	
 	// dynamoClient.scan(params, function (err, data) {
 	// 	console.log(data)
 	// });
@@ -123,8 +122,8 @@ const getWalletInfo = async (address) => {
 		items.Items.forEach((item) => scanResults.push(item));
 		params.ExclusiveStartKey = items.LastEvaluatedKey;
 	} while (typeof items.LastEvaluatedKey !== "undefined");
-	console.log(scanResults);
 	return scanResults;
+	// console.log(await dynamoClient.scan(params).promise())
 };
 
 module.exports = {
