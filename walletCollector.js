@@ -67,7 +67,7 @@ async function walletCollector(finalOutput, key) {
 			arr.Flag = true;
 			updateFlagStatus(arr);
 		}
-		await updateTaskInfo(key);
+		updateTaskInfo(key);
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
 		console.error(err);

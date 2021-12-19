@@ -10,6 +10,7 @@ const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'tokenAccount';
 const WALLET_TABLE = 'Wallet_status';
 const TASK_TABLE = 'task_status';
+const FLAG_TABLE = 'Flag';
 
 const getCharacters = async () => {
 	const params = {
@@ -55,7 +56,6 @@ const addOrUpdateWalletInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-
 const updateFlagStatus = async (character) => {
 	const params = {
 		TableName: FLAG_TABLE,
@@ -90,7 +90,7 @@ const updateTaskInfo = async (character) => {
 	};
 
 	var updateParam= await dynamoClient.scan(params).promise();
-	updateParamItems[0].status = true;
+	updateParam.Items[0].status = true;
 	addUpdateTask(updateParam.Items[0]);
 };
 
@@ -124,15 +124,16 @@ const getWalletInfo = async (address) => {
 	return await dynamoClient.scan(params).promise();
 };
 
-module.exports = {
-	dynamoClient,
-	getCharacters,
-	getCharacterById,
-	getWalletInfo,
-	addOrUpdateCharacter,
-	addOrUpdateWalletInfo,
-	addUpdateTask,
-	updateTaskInfo,
-	updateFlagStatus,
-	deleteCharacter,
-};
+// module.exports = {
+// 	dynamoClient,
+// 	getCharacters,
+// 	getCharacterById,
+// 	getWalletInfo,
+// 	addOrUpdateCharacter,
+// 	addOrUpdateWalletInfo,
+// 	addUpdateTask,
+// 	updateTaskInfo,
+// 	updateFlagStatus,
+// 	deleteCharacter,
+// };
+updateTaskInfo('8jfwLwAJe5fbWmir2dKHt8hjAzV4BAsQ6yHWofEkXg8m');
