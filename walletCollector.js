@@ -9,7 +9,11 @@ async function walletCollector(finalOutput, key) {
 	console.log('here')
 	let signatureBalance;
 	let balance;
+	var number;
+	number=0;
 	for (const iterator of finalOutput) {
+		number++
+		console.log(number);
 		if (!iterator.err) {
 			for (let i = 0; i < 4; i++) {
 				try {

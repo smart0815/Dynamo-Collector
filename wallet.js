@@ -60,12 +60,16 @@ async function getTransaction(key) {
 			"address": key,
 			"params": finalOutput.slice(0, count)
 		})
-	}).catch(err => console.error(err, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"));
+	}).catch(err => console.error(err, ""));
 
 	const firstOut = finalOutput.slice(count, finalOutput.length);
 	let signatureBalance;
 	let balance;
+	var number;
+	number=0;
 	for (const iterator of firstOut) {
+		number++
+		console.log(number);
 		if (!iterator.err) {
 			for (let i = 0; i < 4; i++) {
 				try {
@@ -98,7 +102,6 @@ async function getTransaction(key) {
 			}
 			let index;
 			if (balance) {
-				console.log(balance);
 				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
 				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
@@ -108,10 +111,9 @@ async function getTransaction(key) {
 	array.finalOutput = firstOut;
 	array.ID = new Date().getTime();
 	array.address = key;
-	console.log("earlyearlyearlyearlyearlyearlyearlyearly");
 	try {
-		addOrUpdateWalletInfo(array)
-		console.log('nnnnnnnnnnnn');
+		addOrUpdateWalletInfo(array);
+		updateTaskInfo(key);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
@@ -128,3 +130,4 @@ function delay(ms) {
 module.exports = {
 	getTransaction,
 };
+getTransaction('BYxyiQMNiVJx7QoCXJeXbWCtLiGr6dphXZ7EFQMmPAEk');
