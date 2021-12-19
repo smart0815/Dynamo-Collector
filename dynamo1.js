@@ -126,16 +126,16 @@ const getWalletInfo = async (address) => {
 	console.log(scanResults);
 	return scanResults;
 };
-getWalletInfo('8GLkXaQycnZdUfFNVEt6EzuVq7ySKeCYDxG58j4V6LDY');
-// module.exports = {
-// 	dynamoClient,
-// 	getCharacters,
-// 	getCharacterById,
-// 	getWalletInfo,
-// 	addOrUpdateCharacter,
-// 	addOrUpdateWalletInfo,
-// 	addUpdateTask,
-// 	updateTaskInfo,
-// 	updateFlagStatus,
-// 	deleteCharacter,
-// };
+
+module.exports = {
+	dynamoClient,
+	getCharacters,
+	getCharacterById,
+	getWalletInfo,
+	addOrUpdateCharacter,
+	addOrUpdateWalletInfo,
+	addUpdateTask,
+	updateTaskInfo,
+	updateFlagStatus,
+	deleteCharacter,
+};
