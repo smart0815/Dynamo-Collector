@@ -7,7 +7,6 @@ AWS.config.update({
 });
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
-// const TABLE_NAME = 'hpCharacters';
 const TABLE_NAME = 'tokenAccount';
 const WALLET_TABLE = 'Wallet_status';
 const TASK_TABLE = 'task_status';
@@ -27,8 +26,6 @@ const getCharacters = async () => {
 	} while (typeof items.LastEvaluatedKey !== "undefined");
 
 	return scanResults;
-
-	// return characters;
 };
 
 const getCharacterById = async (id) => {
@@ -58,12 +55,34 @@ const addOrUpdateWalletInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const addOrUpdateTaskInfo = async (character) => {
+const addUpdateTask = async (character) => {
 	const params = {
 		TableName: TASK_TABLE,
 		Item: character,
 	};
 	return await dynamoClient.put(params).promise();
+};
+
+const updateTaskInfo = async (character) => {
+	console.log("mmmmmmmmmmmmmm");
+	console.log("mmmmmmmmmmmmmm");
+	console.log(character);
+
+	var params = {
+		TableName: TASK_TABLE,
+		KeyConditionExpression: "#cat = :findValue",
+		FilterExpression: '#cat = :findValue',
+		ExpressionAttributeNames: {
+			'#cat': 'param',
+		},
+		ExpressionAttributeValues: {
+			':findValue': character,
+		},
+	};
+
+	var updateParam= await dynamoClient.scan(params).promise();
+	updateParamItems[0].status = true;
+	addUpdateTask(updateParam.Items[0]);
 };
 
 const deleteCharacter = async (id) => {
@@ -103,6 +122,7 @@ module.exports = {
 	getWalletInfo,
 	addOrUpdateCharacter,
 	addOrUpdateWalletInfo,
-	addOrUpdateTaskInfo,
+	addUpdateTask,
+	updateTaskInfo,
 	deleteCharacter,
 };

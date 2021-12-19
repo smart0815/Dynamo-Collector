@@ -1,12 +1,8 @@
 const fetch = require('cross-fetch');
-const { addOrUpdateWalletInfo } = require('./dynamo1');
+const { addOrUpdateWalletInfo, updateTaskInfo } = require('./dynamo1');
 
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
-
-const {
-	updateTaskInfo
-} = require('./dynamo1');
 
 async function walletCollector(finalOutput, key) {
 	console.log(key);
@@ -65,7 +61,7 @@ async function walletCollector(finalOutput, key) {
 			array.address = key;
 			addOrUpdateWalletInfo(array);
 		}
-		updateTaskInfo(key);
+		await updateTaskInfo(key);
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
 		console.error(err);
