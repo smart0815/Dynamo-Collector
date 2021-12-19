@@ -32,6 +32,7 @@ const {
 	getWalletInfo,
 	deleteCharacter,
 	getCharacterById,
+	getTaskInfo,
 } = require('./dynamo1');
 
 const { walletCollector } = require('./walletCollector');
@@ -68,8 +69,9 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const character = await getWalletInfo(id);
+		const taskInfo = await getTaskInfo(id);
 		console.log(character);
-		if (!character.length) {
+		if (!character.length && !taskInfo.Items) {
 			const array = [];
 			array.ID = new Date().getTime();
 			array.status = false;

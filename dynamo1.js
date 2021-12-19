@@ -64,6 +64,22 @@ const updateFlagStatus = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
+const getTaskInfo = async (character) => {
+	var params = {
+		TableName: TASK_TABLE,
+		KeyConditionExpression: "#cat = :findValue",
+		FilterExpression: '#cat = :findValue',
+		ExpressionAttributeNames: {
+			'#cat': 'param',
+		},
+		ExpressionAttributeValues: {
+			':findValue': character,
+		},
+	};
+	console.log(await dynamoClient.scan(params).promise());
+	return await dynamoClient.scan(params).promise();
+};
+
 const addUpdateTask = async (character) => {
 	const params = {
 		TableName: TASK_TABLE,
@@ -133,6 +149,7 @@ module.exports = {
 	getWalletInfo,
 	addOrUpdateCharacter,
 	addOrUpdateWalletInfo,
+	getTaskInfo,
 	addUpdateTask,
 	updateTaskInfo,
 	updateFlagStatus,
