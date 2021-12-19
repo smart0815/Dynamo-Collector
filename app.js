@@ -70,8 +70,9 @@ app.get('/walletInfo/:id', async (req, res) => {
 	try {
 		const character = await getWalletInfo(id);
 		const taskInfo = await getTaskInfo(id);
-		console.log(character);
+		console.log(character, taskInfo.Items);
 		if (!character.length && !taskInfo.Items) {
+			console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllll');
 			const array = [];
 			array.ID = new Date().getTime();
 			array.status = false;
