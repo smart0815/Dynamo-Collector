@@ -4,13 +4,17 @@ const { addOrUpdateWalletInfo } = require('./dynamo1');
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
+const {
+	updateTaskInfo
+} = require('./dynamo1');
+
 async function walletCollector(finalOutput, key) {
 	console.log(key);
 	console.log('here')
 	let signatureBalance;
 	let balance;
 	var number;
-	number=0;
+	number = 0;
 	for (const iterator of finalOutput) {
 		number++
 		console.log(number);
@@ -46,25 +50,23 @@ async function walletCollector(finalOutput, key) {
 			}
 			let index;
 			if (balance) {
-				// console.log(balance);
 				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
 				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
 		}
 	}
-	const array = [];
-	array.finalOutput = finalOutput;
-	array.ID = new Date().getTime();
-	array.address = key;
-	// console.log(array);
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
-		// const characterPromises = array.map((character, i) =>
-		addOrUpdateWalletInfo(array)
-		// addOrUpdateWalletInfo({ ...character, ID: i + '' })
-		// );
+		const chunks = chunk(firstOut, 1000);
+		for (const iterator of chunks) {
+			const array = [];
+			array.finalOutput = iterator;
+			array.ID = new Date().getTime();
+			array.address = key;
+			addOrUpdateWalletInfo(array);
+		}
+		updateTaskInfo(key);
 		console.log('nnnnnnnnnnnn');
-		// await Promise.all(characterPromises);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
@@ -73,6 +75,24 @@ async function walletCollector(finalOutput, key) {
 
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function chunk(array, size) {
+	if (size <= 0 || !Number.isInteger(size)) {
+		throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
+	}
+	if (array.length === 0) {
+		return [];
+	}
+	const ret = new Array(Math.ceil(array.length / size));
+	let readIndex = 0;
+	let writeIndex = 0;
+	while (readIndex < array.length) {
+		ret[writeIndex] = array.slice(readIndex, readIndex + size);
+		writeIndex += 1;
+		readIndex += size;
+	}
+	return ret;
 }
 
 module.exports = {

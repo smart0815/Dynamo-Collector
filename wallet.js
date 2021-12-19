@@ -47,7 +47,7 @@ async function getTransaction(key) {
 		}
 		i = i + 1;
 	}
-	console.log(finalOutput);
+	// console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 
 	// collector1(finalOutput, key, count);
@@ -68,8 +68,8 @@ async function getTransaction(key) {
 	var number;
 	number=0;
 	for (const iterator of firstOut) {
-		number++
-		console.log(number);
+		// number++
+		// console.log(number);
 		if (!iterator.err) {
 			for (let i = 0; i < 4; i++) {
 				try {
@@ -107,13 +107,17 @@ async function getTransaction(key) {
 			}
 		}
 	}
-	const array = [];
-	array.finalOutput = firstOut;
-	array.ID = new Date().getTime();
-	array.address = key;
+
 	try {
-		addOrUpdateWalletInfo(array);
-		updateTaskInfo(key);
+		const chunks = chunk(firstOut, 1000);
+		for (const iterator of chunks) {
+			const array = [];
+			array.finalOutput = iterator;
+			array.ID = new Date().getTime();
+			array.address = key;
+			console.log(array);
+			addOrUpdateWalletInfo(array);
+		}
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
@@ -127,7 +131,25 @@ function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+
+function chunk(array, size) {
+  if (size <= 0 || !Number.isInteger(size)) {
+    throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
+  }
+  if (array.length === 0) {
+    return [];
+  }
+  const ret = new Array(Math.ceil(array.length / size));
+  let readIndex = 0;
+  let writeIndex = 0;
+  while (readIndex < array.length) {
+    ret[writeIndex] = array.slice(readIndex, readIndex + size);
+    writeIndex += 1;
+    readIndex += size;
+  }
+  return ret;
+}
+
 module.exports = {
 	getTransaction,
 };
-getTransaction('BYxyiQMNiVJx7QoCXJeXbWCtLiGr6dphXZ7EFQMmPAEk');
