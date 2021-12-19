@@ -73,10 +73,6 @@ const addUpdateTask = async (character) => {
 };
 
 const updateTaskInfo = async (character) => {
-	console.log("mmmmmmmmmmmmmm");
-	console.log("mmmmmmmmmmmmmm");
-	console.log(character);
-
 	var params = {
 		TableName: TASK_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
@@ -116,23 +112,30 @@ const getWalletInfo = async (address) => {
 			':findValue': address,
 		},
 	};
-
+	
 	// dynamoClient.scan(params, function (err, data) {
 	// 	console.log(data)
 	// });
-
-	return await dynamoClient.scan(params).promise();
+	const scanResults = [];
+	let items;
+	do {
+		items = await dynamoClient.scan(params).promise();
+		items.Items.forEach((item) => scanResults.push(item));
+		params.ExclusiveStartKey = items.LastEvaluatedKey;
+	} while (typeof items.LastEvaluatedKey !== "undefined");
+	console.log(scanResults);
+	return scanResults;
 };
-
-module.exports = {
-	dynamoClient,
-	getCharacters,
-	getCharacterById,
-	getWalletInfo,
-	addOrUpdateCharacter,
-	addOrUpdateWalletInfo,
-	addUpdateTask,
-	updateTaskInfo,
-	updateFlagStatus,
-	deleteCharacter,
-};
+getWalletInfo('8GLkXaQycnZdUfFNVEt6EzuVq7ySKeCYDxG58j4V6LDY');
+// module.exports = {
+// 	dynamoClient,
+// 	getCharacters,
+// 	getCharacterById,
+// 	getWalletInfo,
+// 	addOrUpdateCharacter,
+// 	addOrUpdateWalletInfo,
+// 	addUpdateTask,
+// 	updateTaskInfo,
+// 	updateFlagStatus,
+// 	deleteCharacter,
+// };
