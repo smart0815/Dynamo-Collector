@@ -14,43 +14,7 @@ async function walletCollector(finalOutput, key) {
 	for (const iterator of finalOutput) {
 		number++
 		console.log(number);
-		if (!iterator.err) {
-			for (let i = 0; i < 4; i++) {
-				try {
-					signatureBalance = await fetch(`${MAINNET_URL_API}`, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							"jsonrpc": "2.0",
-							"id": 1,
-							"method": "getTransaction",
-							"params": [
-								iterator.signature,
-								"json"
-							]
-						})
-					});
-					balance = await signatureBalance.json();
-					if (balance.result === null) {
-						await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
-						continue;
-					} else {
-						break;
-					}
-				} catch {
-					await delay(milliseconds);
-					continue;
-				}
-			}
-			let index;
-			if (balance) {
-				// console.log(balance);
-				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
-			}
-		}
+		
 	}
 	const array = [];
 	array.finalOutput = finalOutput;
