@@ -51,9 +51,7 @@ async function transactionInfo(key) {
 		}
 		
 		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-		console.log(response);
-		console.log(response.body);
-		console.log(response.send(respopnse.body));
+		console.log(response.send(response.body));
 		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
 		let json = await response.json();
 		let result = json.data;
