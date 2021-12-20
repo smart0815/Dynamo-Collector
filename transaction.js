@@ -13,7 +13,8 @@ const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.co
 let milliseconds = 11000;
 
 const getSol = async (token, offset) => {
-	return await fetch(`https://public-api.solscan.io/account/splTransfers?account=J3dwngT2du9yr9cEZ2n9h9SD7NnQWnwtQvySYMm81M5J&offset=0&limit=60`, {
+	
+	return await fetch(`${SOLSCAN_URL_API}/account/splTransfers?account=${token}&offset=${offset}&limit=50`, {
 		method: "GET",
 		headers: {
 			'accept': 'application/json'
