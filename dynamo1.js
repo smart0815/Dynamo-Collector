@@ -11,6 +11,7 @@ const TABLE_NAME = 'tokenAccount';
 const WALLET_TABLE = 'Wallet_status';
 const TASK_TABLE = 'task_status';
 const FLAG_TABLE = 'Flag';
+const TRANSACTION_TABLE = 'transaction';
 
 const getCharacters = async () => {
 	const params = {
@@ -45,6 +46,14 @@ const addOrUpdateCharacter = async (character) => {
 		Item: character,
 	};
 	// console.log(character);
+	return await dynamoClient.put(params).promise();
+};
+
+const addOrUpdateTransactionInfo = async (character) => {
+	const params = {
+		TableName: TRANSACTION_TABLE,
+		Item: character,
+	};
 	return await dynamoClient.put(params).promise();
 };
 
@@ -156,4 +165,5 @@ module.exports = {
 	updateTaskInfo,
 	updateFlagStatus,
 	deleteCharacter,
+	addOrUpdateTransactionInfo,
 };
