@@ -1,6 +1,5 @@
-// import fetch from "node-fetch";
-const fetch = require('cross-fetch');
-const { addOrUpdateWalletInfo } = require('./dynamo1');
+import fetch from "node-fetch";
+import { addOrUpdateWalletInfo } from './dynamo1.js';
 
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
@@ -28,7 +27,7 @@ async function getResults(before, key) {
 	return response;
 }
 
-async function getTransaction(key) {
+export async function getWalletInfo(key) {
 	let finalOutput = [];
 	let i = 0;
 	while (true) {
@@ -50,7 +49,6 @@ async function getTransaction(key) {
 	// console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 
-	// collector1(finalOutput, key, count);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -66,7 +64,7 @@ async function getTransaction(key) {
 	let signatureBalance;
 	let balance;
 	var number;
-	number=0;
+	number = 0;
 	for (const iterator of firstOut) {
 		// number++
 		// console.log(number);
@@ -133,23 +131,19 @@ function delay(ms) {
 
 
 function chunk(array, size) {
-  if (size <= 0 || !Number.isInteger(size)) {
-    throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
-  }
-  if (array.length === 0) {
-    return [];
-  }
-  const ret = new Array(Math.ceil(array.length / size));
-  let readIndex = 0;
-  let writeIndex = 0;
-  while (readIndex < array.length) {
-    ret[writeIndex] = array.slice(readIndex, readIndex + size);
-    writeIndex += 1;
-    readIndex += size;
-  }
-  return ret;
+	if (size <= 0 || !Number.isInteger(size)) {
+		throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
+	}
+	if (array.length === 0) {
+		return [];
+	}
+	const ret = new Array(Math.ceil(array.length / size));
+	let readIndex = 0;
+	let writeIndex = 0;
+	while (readIndex < array.length) {
+		ret[writeIndex] = array.slice(readIndex, readIndex + size);
+		writeIndex += 1;
+		readIndex += size;
+	}
+	return ret;
 }
-
-module.exports = {
-	getTransaction,
-};

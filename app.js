@@ -1,10 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from "express";
+import bodyParser from "body-Parser";
 // const header_middleware = require("./middlewares/header");
 // const app = express();
 // // const cors = require('cors');
 // app.use(header_middleware);
-const header_middleware = require("./middlewares/header");
+import { header_middleware } from "./middlewares/header";
 const cors = require('cors');
 
 const app = express();
@@ -25,7 +25,7 @@ app.use(header_middleware);
 // parse requests of content-type - application/x-www-form-urlencoded
 // app.use(express.urlencoded({ extended: true }));
 
-const {
+import {
 	addOrUpdateCharacter,
 	addUpdateTask,
 	getCharacters,
@@ -33,11 +33,10 @@ const {
 	deleteCharacter,
 	getCharacterById,
 	getTaskInfo,
-} = require('./dynamo1');
+} from ('./dynamo1');
 
-const { walletCollector } = require('./walletCollector');
-const { transactionCollector } = require('./transactioncollector');
-
+import {walletCollector} from './walletCollector.js'
+import { transactionCollector } from "./transactioncollector.js";
 // const { getTransaction } = require('./wallet');
 // app.use(cors());
 

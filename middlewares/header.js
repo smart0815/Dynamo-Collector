@@ -1,12 +1,13 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-Parser";
+
 const headers = new express.Router()
 
 headers.use(bodyParser.json());
 headers.use(bodyParser.urlencoded({ extended: false }));
 console.log("part1")
 
-headers.use((req, res, next) => {
+export const header_middleware = headers.use((req, res, next) => {
 
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader(
@@ -19,5 +20,3 @@ headers.use((req, res, next) => {
 	);
 	next();
 });
-
-module.exports = headers

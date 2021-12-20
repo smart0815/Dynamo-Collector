@@ -1,5 +1,7 @@
-const AWS = require('aws-sdk');
-require('dotenv').config();
+// const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
+// require('dotenv').config();
+
 AWS.config.update({
 	region: 'us-east-2',
 	accessKeyId: 'AKIAYIGNUXI7JYJLYFP3',
@@ -13,7 +15,7 @@ const TASK_TABLE = 'task_status';
 const FLAG_TABLE = 'Flag';
 const TRANSACTION_TABLE = 'transaction';
 
-const getCharacters = async () => {
+export const getCharacters = async () => {
 	const params = {
 		TableName: TABLE_NAME,
 	};
@@ -30,7 +32,7 @@ const getCharacters = async () => {
 	return scanResults;
 };
 
-const getCharacterById = async (id) => {
+export const getCharacterById = async (id) => {
 	const params = {
 		TableName: TABLE_NAME,
 		Key: {
@@ -40,7 +42,7 @@ const getCharacterById = async (id) => {
 	return await dynamoClient.get(params).promise();
 };
 
-const addOrUpdateCharacter = async (character) => {
+export const addOrUpdateCharacter = async (character) => {
 	const params = {
 		TableName: TABLE_NAME,
 		Item: character,
@@ -49,7 +51,7 @@ const addOrUpdateCharacter = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const addOrUpdateTransactionInfo = async (character) => {
+export const addOrUpdateTransactionInfo = async (character) => {
 	const params = {
 		TableName: TRANSACTION_TABLE,
 		Item: character,
@@ -57,7 +59,7 @@ const addOrUpdateTransactionInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const addOrUpdateWalletInfo = async (character) => {
+export const addOrUpdateWalletInfo = async (character) => {
 	const params = {
 		TableName: WALLET_TABLE,
 		Item: character,
@@ -65,7 +67,7 @@ const addOrUpdateWalletInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const updateFlagStatus = async (character) => {
+export const updateFlagStatus = async (character) => {
 	const params = {
 		TableName: FLAG_TABLE,
 		Item: character,
@@ -73,7 +75,7 @@ const updateFlagStatus = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const getTaskInfo = async (character) => {
+export const getTaskInfo = async (character) => {
 	var params = {
 		TableName: TASK_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
@@ -91,7 +93,7 @@ const getTaskInfo = async (character) => {
 	return await dynamoClient.scan(params).promise();
 };
 
-const addUpdateTask = async (character) => {
+export const addUpdateTask = async (character) => {
 	const params = {
 		TableName: TASK_TABLE,
 		Item: character,
@@ -99,7 +101,7 @@ const addUpdateTask = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-const updateTaskInfo = async (character) => {
+export const updateTaskInfo = async (character) => {
 	var params = {
 		TableName: TASK_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
@@ -117,7 +119,7 @@ const updateTaskInfo = async (character) => {
 	addUpdateTask(updateParam.Items[0]);
 };
 
-const deleteCharacter = async (id) => {
+export const deleteCharacter = async (id) => {
 	const params = {
 		TableName: TABLE_NAME,
 		Key: {
@@ -127,7 +129,7 @@ const deleteCharacter = async (id) => {
 	return await dynamoClient.delete(params).promise();
 };
 
-const getWalletInfo = async (address) => {
+export const getWalletInfo = async (address) => {
 	var params = {
 		TableName: WALLET_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
@@ -153,17 +155,17 @@ const getWalletInfo = async (address) => {
 	// console.log(await dynamoClient.scan(params).promise())
 };
 
-module.exports = {
-	dynamoClient,
-	getCharacters,
-	getCharacterById,
-	getWalletInfo,
-	addOrUpdateCharacter,
-	addOrUpdateWalletInfo,
-	getTaskInfo,
-	addUpdateTask,
-	updateTaskInfo,
-	updateFlagStatus,
-	deleteCharacter,
-	addOrUpdateTransactionInfo,
-};
+// module.exports = {
+// 	dynamoClient,
+// 	getCharacters,
+// 	getCharacterById,
+// 	getWalletInfo,
+// 	addOrUpdateCharacter,
+// 	addOrUpdateWalletInfo,
+// 	getTaskInfo,
+// 	addUpdateTask,
+// 	updateTaskInfo,
+// 	updateFlagStatus,
+// 	deleteCharacter,
+// 	addOrUpdateTransactionInfo,
+// };

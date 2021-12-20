@@ -1,6 +1,5 @@
-const AWS = require('aws-sdk');
-const { param } = require('express/lib/request');
-require('dotenv').config();
+import AWS from 'aws-sdk';
+
 AWS.config.update({
 	region: 'us-east-2',
 	accessKeyId: 'AKIAYIGNUXI7JYJLYFP3',
@@ -11,9 +10,10 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const TASK_TABLE = 'task_status';
 const FLAG_TABLE = 'Flag'
-const {
-	getTransaction,
-} = require('./wallet');
+
+import {
+	getWalletInfo,
+} from './wallet.js';
 
 const getFlagStatus = async () => {
 	const params = {
@@ -54,12 +54,10 @@ const getTaskInfo = async (address) => {
 			arr.ID = 1;
 			arr.Flag = false;
 			updateFlagStatus(arr);
-			getTransaction(taskInfo.Items[0].param);
+			getWalletInfo(taskInfo.Items[0].param);
 			console.log("really?");
 		}
 	}
 };
 
 getTaskInfo(false);
-// getFlagStatus(1);
-// addOrUpdateCharacter(hp);

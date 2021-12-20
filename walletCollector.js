@@ -1,10 +1,10 @@
-const fetch = require('cross-fetch');
-const { addOrUpdateWalletInfo, updateTaskInfo, updateFlagStatus } = require('./dynamo1');
+import fetch from "node-fetch";
+import { addOrUpdateWalletInfo } from './dynamo1.js';
 
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
-async function walletCollector(finalOutput, key) {
+export async function walletCollector(finalOutput, key) {
 	console.log(key);
 	console.log('here')
 	let signatureBalance;
@@ -96,7 +96,3 @@ function chunk(array, size) {
 	}
 	return ret;
 }
-
-module.exports = {
-	walletCollector,
-};

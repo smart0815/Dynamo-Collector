@@ -1,6 +1,9 @@
-const fetch = require('cross-fetch');
-const { addOrUpdateTransactionInfo } = require('./dynamo1');
-
+// const fetch = require('cross-fetch');
+// require('node-fetch')
+// const fetch = require("node-fetch");
+import fetch from "node-fetch";
+// const { addOrUpdateTransactionInfo } = require('./dynamo1');
+import { addOrUpdateTransactionInfo } from './dynamo1.js';
 const SOLSCAN_URL_API = "https://public-api.solscan.io";
 // const SOLSCAN_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
@@ -10,7 +13,7 @@ const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.co
 let milliseconds = 11000;
 
 const getSol = async (token, offset) => {
-	return await fetch(`${SOLSCAN_URL_API}/account/splTransfers?account=${token}&offset=${offset}&limit=50`, {
+	return await fetch(`https://public-api.solscan.io/account/splTransfers?account=J3dwngT2du9yr9cEZ2n9h9SD7NnQWnwtQvySYMm81M5J&offset=0&limit=60`, {
 		method: "GET",
 		headers: {
 			'accept': 'application/json'
@@ -18,12 +21,13 @@ const getSol = async (token, offset) => {
 	});
 }
 
-async function transactionInfo(key) {
+export async function transactionInfo(key) {
 	let i = 0;
 	let finalOutputFromCamps = [];
 
 	while (true) {
 		const getResponseSol = async () => await getSol(key, i * 50); // This is an arrow function for re-usability
+		console.log(await getResponseSol());
 		let response;
 		// Retry 5 times.
 		// If getResponseSol throws an error, await 5seconds and re-try
@@ -32,6 +36,7 @@ async function transactionInfo(key) {
 		for (let i = 0; i < 5; i++) {
 			try {
 				response = await getResponseSol();
+				console.log(response);
 				if (response.status === 429) {
 					await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 					continue;
@@ -49,10 +54,6 @@ async function transactionInfo(key) {
 			console.log("getCamps failed and appending to finalOutputFromCamps has been skipped");
 			return;
 		}
-		
-		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-		console.log(await response.text());
-		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
 		let json = await response.json();
 		let result = json.data;
 		if (result.length > 0) {
@@ -161,9 +162,3 @@ function chunk(array, size) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-transactionInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds');
-
-module.exports = {
-	transactionInfo,
-};

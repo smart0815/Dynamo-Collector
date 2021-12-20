@@ -1,12 +1,12 @@
-const fetch = require('cross-fetch');
-const { addOrUpdateTransactionInfo } = require('./dynamo1');
+import fetch from "node-fetch";
+import { addOrUpdateTransactionInfo } from './dynamo1.js';
 
 const SOLSCAN_URL_API = "https://public-api.solscan.io";
 // const SOLSCAN_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const SPECIALNFT_URL_API = "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet";
 
-async function transactionCollector(finalOutputFromCamps, key) {
+export async function transactionCollector(finalOutputFromCamps, key) {
 	console.log(finalOutputFromCamps);
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
 
@@ -89,7 +89,3 @@ function chunk(array, size) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-module.exports = {
-	transactionCollector,
-};
