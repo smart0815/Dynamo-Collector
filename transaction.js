@@ -18,7 +18,7 @@ const getSol = async (token, offset) => {
 	});
 }
 
-async function getTransaction(key) {
+async function transactionInfo(key) {
 	let i = 0;
 	let finalOutputFromCamps = [];
 
@@ -49,9 +49,9 @@ async function getTransaction(key) {
 			console.log("getCamps failed and appending to finalOutputFromCamps has been skipped");
 			return;
 		}
-		let json = await response?.json();
-		let result = json?.data;
-		if (result?.length > 0) {
+		let json = await response.json();
+		let result = json.data;
+		if (result.length > 0) {
 			finalOutputFromCamps = [...finalOutputFromCamps, ...result];
 		} else {
 			break;
@@ -109,7 +109,7 @@ async function getTransaction(key) {
 				let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
 
 				for (var elem of Metadata) {
-					if (elem?.data.uri) {
+					if (elem.data.uri) {
 						let nftMetadtacontent = await fetch(elem.data.uri);
 						iterator.nftMetaData = await nftMetadtacontent.json();
 					}
@@ -158,4 +158,8 @@ function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-getTransaction('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds');
+transactionInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds');
+
+module.exports = {
+	transactionInfo,
+};

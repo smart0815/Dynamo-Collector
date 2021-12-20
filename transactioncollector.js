@@ -42,7 +42,7 @@ async function transactionCollector(finalOutputFromCamps, key) {
 				let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
 
 				for (var elem of Metadata) {
-					if (elem?.data.uri) {
+					if (elem.data.uri) {
 						let nftMetadtacontent = await fetch(elem.data.uri);
 						iterator.nftMetaData = await nftMetadtacontent.json();
 					}
@@ -89,3 +89,7 @@ function chunk(array, size) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+module.exports = {
+	transactionCollector,
+};

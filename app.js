@@ -36,6 +36,8 @@ const {
 } = require('./dynamo1');
 
 const { walletCollector } = require('./walletCollector');
+const { transactionCollector } = require('./transactioncollector');
+
 // const { getTransaction } = require('./wallet');
 // app.use(cors());
 
@@ -109,6 +111,18 @@ app.post('/walletCollector', async (req, res) => {
 	// const id = req.params.id;
 	try {
 		const character = await walletCollector(req.body.params, req.body.address);
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+	}
+});
+
+app.post('/transactionCollector', async (req, res) => {
+	console.log(req.body);
+	console.log(req.body.params)
+	// const id = req.params.id;
+	try {
+		const character = await transactionCollector(req.body.params, req.body.address);
 		res.json(character);
 	} catch (err) {
 		console.error(err);
