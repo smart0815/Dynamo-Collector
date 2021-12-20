@@ -4,7 +4,7 @@ import bodyParser from "body-Parser";
 // const app = express();
 // // const cors = require('cors');
 // app.use(header_middleware);
-import { header_middleware } from "./middlewares/header";
+import { header_middleware } from "./middlewares/header.js";
 const cors = require('cors');
 
 const app = express();
@@ -33,7 +33,7 @@ import {
 	deleteCharacter,
 	getCharacterById,
 	getTaskInfo,
-} from ('./dynamo1');
+} from ('./dynamo1.js');
 
 import {walletCollector} from './walletCollector.js'
 import { transactionCollector } from "./transactioncollector.js";
