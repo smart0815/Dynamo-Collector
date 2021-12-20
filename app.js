@@ -71,16 +71,14 @@ app.get('/walletInfo/:id', async (req, res) => {
 		const character = await getWalletInfo(id);
 		const taskInfo = await getTaskInfo(id);
 		console.log(character, taskInfo.Items);
-		if (!character.length) {
-			if(!taskInfo.Items) {
-				console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-				const array = [];
-				array.ID = new Date().getTime();
-				array.status = false;
-				array.character = "wallet";
-				array.param = id;
-				addUpdateTask(array);
-			}
+		if (!character.length && !taskInfo.Items.length) {
+			console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+			const array = [];
+			array.ID = new Date().getTime();
+			array.status = false;
+			array.character = "wallet";
+			array.param = id;
+			addUpdateTask(array);
 		}
 		res.send(character);
 	} catch (err) {
