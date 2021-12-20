@@ -1,9 +1,5 @@
 import express from "express";
-import bodyParser from "body-Parser";
-// const header_middleware = require("./middlewares/header");
-// const app = express();
-// // const cors = require('cors');
-// app.use(header_middleware);
+import bodyParser from "body-parser";
 import { header_middleware } from "./middlewares/header.js";
 import cors from 'cors';
 
@@ -73,7 +69,6 @@ app.get('/walletInfo/:id', async (req, res) => {
 		const taskInfo = await getTaskInfo(id);
 		console.log(character, taskInfo.Items);
 		if (!character.length && !taskInfo.Items.length) {
-			console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllll');
 			const array = [];
 			array.ID = new Date().getTime();
 			array.status = false;
@@ -87,17 +82,6 @@ app.get('/walletInfo/:id', async (req, res) => {
 		res.status(500).json({ err: 'Something went wrong' });
 	}
 });
-
-// app.get('/wallet', async (req, res) => {
-// 	console.log(req.params.key);
-// 	// const id = req.params.id;
-// 	try {
-// 		const character = await getTransaction(req.params.key);
-// 		res.json(character);
-// 	} catch (err) {
-// 		console.error(err);
-// 	}
-// });
 
 app.post('/walletCollector', async (req, res) => {
 	console.log("kkkkkkkkk");
@@ -117,9 +101,6 @@ app.post('/walletCollector', async (req, res) => {
 });
 
 app.post('/transactionCollector', async (req, res) => {
-	console.log(req.body);
-	console.log(req.body.params)
-	// const id = req.params.id;
 	try {
 		const character = await transactionCollector(req.body.params, req.body.address);
 		res.json(character);
