@@ -173,7 +173,7 @@ var METADATA_SCHEMA = new Map([
         },
     ],
 ]);
-function getMetadataAccount(tokenMint) {
+export function getMetadataAccount(tokenMint) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -189,7 +189,7 @@ function getMetadataAccount(tokenMint) {
 }
 exports.getMetadataAccount = getMetadataAccount;
 var METADATA_REPLACE = new RegExp("\u0000", "g");
-var decodeMetadata = function (buffer) {
+export var decodeMetadata = function (buffer) {
     try {
         var metadata = (0, borsh_1.deserializeUnchecked)(METADATA_SCHEMA, Metadata, buffer);
         metadata.data.name = metadata.data.name.replace(METADATA_REPLACE, "");
