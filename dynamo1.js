@@ -87,9 +87,6 @@ export const getTaskInfo = async (character) => {
 			':findValue': character,
 		},
 	};
-	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-	console.log(await dynamoClient.scan(params).promise());
-	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
 	return await dynamoClient.scan(params).promise();
 };
 
