@@ -49,6 +49,12 @@ async function transactionInfo(key) {
 			console.log("getCamps failed and appending to finalOutputFromCamps has been skipped");
 			return;
 		}
+		
+		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+		console.log(response);
+		console.log(response.body);
+		console.log(response.send(respopnse.body));
+		console.log('nmm,nmnnmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
 		let json = await response.json();
 		let result = json.data;
 		if (result.length > 0) {
@@ -60,7 +66,7 @@ async function transactionInfo(key) {
 	}
 
 	let count = finalOutputFromCamps.length % 2 == 0 ? finalOutputFromCamps.length / 2 : finalOutputFromCamps.length / 2 + 0.5;
-
+	console.log(count);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
