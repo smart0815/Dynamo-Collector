@@ -2,6 +2,8 @@
 // require('node-fetch')
 // const fetch = require("node-fetch");
 import fetch from "node-fetch";
+import { decodeMetadata, getMetadataAccount } from "./MetadataService.js";
+
 // const { addOrUpdateTransactionInfo } = require('./dynamo1');
 import { addOrUpdateTransactionInfo } from './dynamo1.js';
 const SOLSCAN_URL_API = "https://public-api.solscan.io";
