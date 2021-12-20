@@ -27,7 +27,6 @@ export async function transactionInfo(key) {
 
 	while (true) {
 		const getResponseSol = async () => await getSol(key, i * 50); // This is an arrow function for re-usability
-		console.log(await getResponseSol());
 		let response;
 		// Retry 5 times.
 		// If getResponseSol throws an error, await 5seconds and re-try
@@ -36,7 +35,6 @@ export async function transactionInfo(key) {
 		for (let i = 0; i < 5; i++) {
 			try {
 				response = await getResponseSol();
-				console.log(response);
 				if (response.status === 429) {
 					await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 					continue;
@@ -65,6 +63,7 @@ export async function transactionInfo(key) {
 	}
 
 	let count = finalOutputFromCamps.length % 2 == 0 ? finalOutputFromCamps.length / 2 : finalOutputFromCamps.length / 2 + 0.5;
+	console.log(finalOutputFromCamps);
 	console.log(count);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
@@ -77,7 +76,6 @@ export async function transactionInfo(key) {
 		})
 	}).catch(err => console.error(err, ""));
 
-	console.log(finalOutputFromCamps);
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
 
 	const transactionCamps = finalOutputFromCamps.slice(count, finalOutput.length);
