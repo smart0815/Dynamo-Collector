@@ -23,7 +23,7 @@ import {
 	getTaskInfo,
 } from './dynamo1.js';
 
-import {walletCollector} from './walletCollector.js'
+import { walletCollector } from './walletCollector.js'
 import { transactionCollector } from "./transactioncollector.js";
 // const { getTransaction } = require('./wallet');
 // app.use(cors());
@@ -94,6 +94,7 @@ app.post('/walletCollector', async (req, res) => {
 
 app.post('/transactionCollector', async (req, res) => {
 	try {
+		console.log('mmmmmmmmmmmmmmmmmmmmmmm');
 		const character = await transactionCollector(req.body.params, req.body.address);
 		res.json(character);
 	} catch (err) {

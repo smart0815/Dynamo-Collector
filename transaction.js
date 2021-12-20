@@ -79,7 +79,7 @@ export async function transactionInfo(key) {
 
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
 
-	const transactionCamps = finalOutputFromCamps.slice(count, finalOutput.length);
+	const transactionCamps = finalOutputFromCamps.slice(count, finalOutputFromCamps.length);
 
 	for (const iterator of transactionCamps) {
 		let nftMetadtacontent = await fetch(`${MAINNET_URL_API}`, {
