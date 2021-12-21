@@ -13,8 +13,11 @@ let milliseconds = 11000;
 export async function transactionCollector(finalOutputFromCamps, key) {
 	console.log(finalOutputFromCamps);
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
-
+	var number;
+	number = 0;
 	for (const iterator of finalOutputFromCamps) {
+		number++
+		console.log(number);
 		for (let i = 0; i < 4; i++) {
 			try {
 				let nftMetadtacontent = await fetch(`${MAINNET_URL_API}`, {
@@ -73,7 +76,7 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 			array.finalOutput = iterator;
 			array.ID = new Date().getTime();
 			array.address = key;
-			console.log(array);
+			console.log( iterator, ID, key);
 			addOrUpdateTransactionInfo(array);
 		}
 	} catch (err) {

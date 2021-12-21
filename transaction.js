@@ -83,8 +83,11 @@ export async function transactionInfo(key) {
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
 
 	const transactionCamps = finalOutputFromCamps.slice(count, finalOutputFromCamps.length);
-
+	var number;
+	number = 0;
 	for (const iterator of transactionCamps) {
+				number++
+		console.log(number);
 		for (let i = 0; i < 4; i++) {
 			try {
 				let nftMetadtacontent = await fetch(`${MAINNET_URL_API}`, {
@@ -143,7 +146,7 @@ export async function transactionInfo(key) {
 			array.finalOutput = iterator;
 			array.ID = new Date().getTime();
 			array.address = key;
-			console.log(array);
+			console.log( iterator, ID, key);
 			addOrUpdateTransactionInfo(array);
 		}
 	} catch (err) {
@@ -176,4 +179,4 @@ function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-transactionInfo('D7kkxFuTT2o6Z93uDcqQ1GWFBTzyjy8g6kFj16oPxDNW');
+transactionInfo('J3dwngT2du9yr9cEZ2n9h9SD7NnQWnwtQvySYMm81M5J');
