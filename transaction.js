@@ -175,3 +175,5 @@ function chunk(array, size) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+transactionInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds');
