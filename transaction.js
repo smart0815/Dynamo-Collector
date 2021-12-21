@@ -3,7 +3,8 @@
 // const fetch = require("node-fetch");
 import fetch from "node-fetch";
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
-
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 // const { addOrUpdateTransactionInfo } = require('./dynamo1');
 import { addOrUpdateTransactionInfo } from './dynamo1.js';
 const SOLSCAN_URL_API = "https://public-api.solscan.io";
