@@ -75,7 +75,7 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 			for (let j = 0; j < 3; j++) {
 				try {
 					const array = [];
-					array.finalOutput = iterator;
+					array.finalOutput = JSON.parse(JSON.stringify(iterator));
 					array.ID = new Date().getTime();
 					array.address = key;
 					// console.log( iterator, new Date().getTime(), key);
