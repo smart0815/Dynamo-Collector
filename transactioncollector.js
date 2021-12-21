@@ -67,7 +67,7 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 	}
 
 	try {
-		const transactionCampsChunk = chunk(finalOutputFromCamps, 1000);
+		const transactionCampsChunk = chunk(finalOutputFromCamps, 200);
 		for (const iterator of transactionCampsChunk) {
 			const array = [];
 			array.finalOutput = iterator;

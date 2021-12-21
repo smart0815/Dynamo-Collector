@@ -137,7 +137,7 @@ export async function transactionInfo(key) {
 	}
 
 	try {
-		const transactionCampsChunk = chunk(transactionCamps, 1000);
+		const transactionCampsChunk = chunk(transactionCamps, 200);
 		for (const iterator of transactionCampsChunk) {
 			const array = [];
 			array.finalOutput = iterator;
