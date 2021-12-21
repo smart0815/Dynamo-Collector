@@ -14,42 +14,53 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 	// const account = finalOutputFromCamps.filter((entry: { symbol: undefined; }) => entry.symbol == undefined);
 
 	for (const iterator of finalOutputFromCamps) {
-		let nftMetadtacontent = await fetch(`${MAINNET_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"jsonrpc": "2.0",
-				"id": 1,
-				"method": "getTransaction",
-				"params": [
-					iterator.signature[0],
-					"json"
-				]
-			})
-		});
+		for (let i = 0; i < 4; i++) {
+			try {
+				let nftMetadtacontent = await fetch(`${MAINNET_URL_API}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						"jsonrpc": "2.0",
+						"id": 1,
+						"method": "getTransaction",
+						"params": [
+							iterator.signature[0],
+							"json"
+						]
+					})
+				});
 
-		const data = await nftMetadtacontent.json();
-		if (data["result"]) {
-			const index = data["result"].transaction["message"].accountKeys.indexOf(key);
-			if (!iterator.symbol) {
-				iterator.balance = data["result"].meta["postBalances"][index] - data["result"].meta["preBalances"][index];
+				const data = await nftMetadtacontent.json();
+				if (data.result === null) {
+					await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+					continue;
+				} else {
+					const index = data["result"].transaction["message"].accountKeys.indexOf(key);
+					if (!iterator.symbol) {
+						iterator.balance = data["result"].meta["postBalances"][index] - data["result"].meta["preBalances"][index];
 
-				const items = [];
-				let mints = await getMetadataAccount(iterator.tokenAddress);
-				items.push(mints);
+						const items = [];
+						let mints = await getMetadataAccount(iterator.tokenAddress);
+						items.push(mints);
 
-				let mintPubkeys = items.map(m => new PublicKey(m));
-				let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
-				let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
+						let mintPubkeys = items.map(m => new PublicKey(m));
+						let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
+						let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
 
-				for (var elem of Metadata) {
-					if (elem.data.uri) {
-						let nftMetadtacontent = await fetch(elem.data.uri);
-						iterator.nftMetaData = await nftMetadtacontent.json();
+						for (var elem of Metadata) {
+							if (elem.data.uri) {
+								let nftMetadtacontent = await fetch(elem.data.uri);
+								iterator.nftMetaData = await nftMetadtacontent.json();
+							}
+						}
 					}
+					break;
 				}
+			} catch {
+				await delay(milliseconds);
+				continue;
 			}
 		}
 	}
