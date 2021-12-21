@@ -8,6 +8,7 @@ const SOLSCAN_URL_API = "https://public-api.solscan.io";
 // const SOLSCAN_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const SPECIALNFT_URL_API = "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet";
+let milliseconds = 11000;
 
 export async function transactionCollector(finalOutputFromCamps, key) {
 	console.log(finalOutputFromCamps);
