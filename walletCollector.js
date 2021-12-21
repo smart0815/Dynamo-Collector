@@ -47,7 +47,7 @@ export async function walletCollector(finalOutput, key) {
 			let index;
 			if (balance) {
 				if (balance["result"].meta["postTokenBalances"]) {
-					const items;
+					const items = [];
 					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
 					items.push(mints);
 
