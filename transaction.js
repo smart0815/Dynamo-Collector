@@ -146,7 +146,7 @@ export async function transactionInfo(key) {
 			array.finalOutput = iterator;
 			array.ID = new Date().getTime();
 			array.address = key;
-			console.log( iterator, ID, key);
+			console.log( iterator, new Date().getTime(), key);
 			addOrUpdateTransactionInfo(array);
 		}
 	} catch (err) {
