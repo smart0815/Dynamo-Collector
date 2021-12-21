@@ -70,7 +70,7 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 	}
 
 	try {
-		const transactionCampsChunk = chunk(finalOutputFromCamps, 500);
+		const transactionCampsChunk = chunk(finalOutputFromCamps, 100);
 		for (const iterator of transactionCampsChunk) {
 			for (let j = 0; j < 3; j++) {
 				try {

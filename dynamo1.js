@@ -56,7 +56,11 @@ export const addOrUpdateTransactionInfo = async (character) => {
 		TableName: TRANSACTION_TABLE,
 		Item: character,
 	};
-	return await dynamoClient.put(params).promise();
+	const addTransactionInfo = await dynamoClient.put(params).promise();
+	console.log(',...................');
+	console.log(addTransactionInfo);
+	console.log(',...................');
+	return addTransactionInfo;
 };
 
 export const addOrUpdateWalletInfo = async (character) => {
