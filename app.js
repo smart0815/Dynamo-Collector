@@ -57,7 +57,7 @@ app.get('/walletInfo/:id', async (req, res) => {
 	const id = req.params.id;
 	console.log(id);
 	try {
-		const character = await getWalletInfo(id);
+		const character = await getWalletInfo(id, 1);
 		const taskInfo = await getTaskInfo(id);
 		console.log(character, taskInfo.Items);
 		if (!character.length && !taskInfo.Items.length) {
@@ -65,6 +65,28 @@ app.get('/walletInfo/:id', async (req, res) => {
 			array.ID = new Date().getTime();
 			array.status = false;
 			array.character = "wallet";
+			array.param = id;
+			addUpdateTask(array);
+		}
+		res.send(character);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ err: 'Something went wrong' });
+	}
+});
+
+app.get('/transactionInfo/:id', async (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+	try {
+		const character = await getWalletInfo(id, 2);
+		const taskInfo = await getTaskInfo(id);
+		console.log(character, taskInfo.Items);
+		if (!character.length && !taskInfo.Items.length) {
+			const array = [];
+			array.ID = new Date().getTime();
+			array.status = false;
+			array.character = "transaction";
 			array.param = id;
 			addUpdateTask(array);
 		}

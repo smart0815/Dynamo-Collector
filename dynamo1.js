@@ -126,9 +126,9 @@ export const deleteCharacter = async (id) => {
 	return await dynamoClient.delete(params).promise();
 };
 
-export const getWalletInfo = async (address) => {
+export const getWalletInfo = async (address, info) => {
 	var params = {
-		TableName: WALLET_TABLE,
+		TableName: info == 1 ? WALLET_TABLE : TRANSACTION_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
 		FilterExpression: '#cat = :findValue',
 		ExpressionAttributeNames: {
@@ -151,18 +151,3 @@ export const getWalletInfo = async (address) => {
 	return scanResults;
 	// console.log(await dynamoClient.scan(params).promise())
 };
-
-// module.exports = {
-// 	dynamoClient,
-// 	getCharacters,
-// 	getCharacterById,
-// 	getWalletInfo,
-// 	addOrUpdateCharacter,
-// 	addOrUpdateWalletInfo,
-// 	getTaskInfo,
-// 	addUpdateTask,
-// 	updateTaskInfo,
-// 	updateFlagStatus,
-// 	deleteCharacter,
-// 	addOrUpdateTransactionInfo,
-// };

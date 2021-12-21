@@ -16,7 +16,7 @@ const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.co
 let milliseconds = 11000;
 
 const getSol = async (token, offset) => {
-	
+
 	return await fetch(`${SOLSCAN_URL_API}/account/splTransfers?account=${token}&offset=${offset}&limit=50`, {
 		method: "GET",
 		headers: {
@@ -132,7 +132,7 @@ export async function transactionInfo(key) {
 			array.finalOutput = iterator;
 			array.ID = new Date().getTime();
 			array.address = key;
-			console.log(array);
+			console.log(array);	
 			addOrUpdateTransactionInfo(array);
 		}
 	} catch (err) {
@@ -164,5 +164,3 @@ function chunk(array, size) {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-transactionInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds');
