@@ -77,7 +77,7 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 			array.ID = new Date().getTime();
 			array.address = key;
 			console.log( iterator, new Date().getTime(), key);
-			addOrUpdateTransactionInfo(array);
+			await addOrUpdateTransactionInfo(array);
 		}
 	} catch (err) {
 		console.error(err);
