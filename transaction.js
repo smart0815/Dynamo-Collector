@@ -2,7 +2,7 @@
 // require('node-fetch')
 // const fetch = require("node-fetch");
 import fetch from "node-fetch";
-import { decodeMetadata, getMetadataAccount } from "./MetadataService.js";
+import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 
 // const { addOrUpdateTransactionInfo } = require('./dynamo1');
 import { addOrUpdateTransactionInfo } from './dynamo1.js';
