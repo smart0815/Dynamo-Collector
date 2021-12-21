@@ -70,14 +70,15 @@ export async function transactionCollector(finalOutputFromCamps, key) {
 	}
 
 	try {
-		const transactionCampsChunk = chunk(finalOutputFromCamps, 200);
+		const transactionCampsChunk = chunk(finalOutputFromCamps, 50);
 		for (const iterator of transactionCampsChunk) {
 			const array = [];
 			array.finalOutput = iterator;
 			array.ID = new Date().getTime();
 			array.address = key;
-			console.log( iterator, new Date().getTime(), key);
-			await addOrUpdateTransactionInfo(array);
+			// console.log( iterator, new Date().getTime(), key);
+			const updateStatus = await addOrUpdateTransactionInfo(array);
+			console.log(updateStatus);
 		}
 	} catch (err) {
 		console.error(err);
