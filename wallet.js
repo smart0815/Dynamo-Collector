@@ -1,6 +1,8 @@
 import fetch from "node-fetch";
 import { addOrUpdateWalletInfo, updateTaskInfo } from './dynamo1.js';
-
+import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/";
