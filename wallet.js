@@ -100,6 +100,25 @@ export async function getWalletInfo(key) {
 			}
 			let index;
 			if (balance) {
+				if (balance["result"].meta["postTokenBalances"]) {
+					const items;
+					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
+					items.push(mints);
+
+					let mintPubkeys = items.map(m => new PublicKey(m));
+					let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
+					let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
+					for (var elem of Metadata) {
+						if (elem?.data.uri) {
+							let nftMetadtacontent = await fetch(elem.data.uri);
+							iterator.nftMetaData = await nftMetadtacontent.json();
+						}
+						else {
+							iterator.symbol = elem.data.symbol;
+						}
+					}
+				}
+
 				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
 				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
