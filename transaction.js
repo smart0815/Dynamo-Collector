@@ -86,7 +86,7 @@ export async function transactionInfo(key) {
 	var number;
 	number = 0;
 	for (const iterator of transactionCamps) {
-				number++
+		number++
 		console.log(number);
 		for (let i = 0; i < 4; i++) {
 			try {
@@ -140,15 +140,22 @@ export async function transactionInfo(key) {
 	}
 
 	try {
-		const transactionCampsChunk = chunk(transactionCamps, 50);
+		const transactionCampsChunk = chunk(finalOutputFromCamps, 500);
 		for (const iterator of transactionCampsChunk) {
-			const array = [];
-			array.finalOutput = iterator;
-			array.ID = new Date().getTime();
-			array.address = key;
-			// console.log( iterator, new Date().getTime(), key);
-			const updateStatus = await addOrUpdateTransactionInfo(array);
-			console.log(updateStatus);
+			for (let j = 0; j < 3; j++) {
+				try {
+					const array = [];
+					array.finalOutput = iterator;
+					array.ID = new Date().getTime();
+					array.address = key;
+					// console.log( iterator, new Date().getTime(), key);
+					addOrUpdateTransactionInfo(array);
+					break;
+				} catch {
+					await delay(milliseconds);
+					continue;
+				}
+			}
 		}
 	} catch (err) {
 		console.error(err);
