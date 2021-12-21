@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { addOrUpdateWalletInfo } from './dynamo1.js';
+import { addOrUpdateWalletInfo, updateFlagStatus } from './dynamo1.js';
 
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
@@ -79,14 +79,12 @@ export async function walletCollector(finalOutput, key) {
 			array.ID = new Date().getTime();
 			array.address = key;
 			addOrUpdateWalletInfo(array);
-
-			// flag status
-			var arr = [];
-			arr.ID = 1;
-			arr.Flag = true;
-			updateFlagStatus(arr);
 		}
-		updateTaskInfo(key);
+		// flag status
+		var arr = [];
+		arr.ID = 1;
+		arr.Flag = true;
+		updateFlagStatus(arr);
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
 		console.error(err);

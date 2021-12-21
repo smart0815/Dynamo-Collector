@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { addOrUpdateWalletInfo } from './dynamo1.js';
+import { addOrUpdateWalletInfo, updateTaskInfo } from './dynamo1.js';
 
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
@@ -135,6 +135,7 @@ export async function getWalletInfo(key) {
 			console.log(array);
 			addOrUpdateWalletInfo(array);
 		}
+		updateTaskInfo(key);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
