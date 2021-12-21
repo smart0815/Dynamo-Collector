@@ -149,7 +149,7 @@ export async function getWalletInfo(key) {
 			console.log(array);
 			addOrUpdateWalletInfo(array);
 		}
-		updateTaskInfo(key);
+		// updateTaskInfo(key);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
