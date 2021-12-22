@@ -64,7 +64,7 @@ export async function walletCollector(finalOutput, key) {
 						}
 						else {
 							iterator.symbol = elem.data.symbol;
-							iterator.coinPrice = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1) - balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
+							iterator.coinPrice = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1)[0]["uiTokenAmount"].uiAmount - balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1)[0]["uiTokenAmount"].uiAmount;
 
 							if (iterator.coinPrice) {
 								iterator.unit = elem.data.symbol;
