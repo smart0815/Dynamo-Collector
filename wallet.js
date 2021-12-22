@@ -154,21 +154,21 @@ export async function getWalletInfo(key) {
 		}
 	}
 
-	// try {
-	// 	const chunks = chunk(firstOut, 1000);
-	// 	for (const iterator of chunks) {
-	// 		const array = [];
-	// 		array.finalOutput = JSON.parse(JSON.stringify(iterator));
-	// 		array.ID = new Date().getTime();
-	// 		array.address = key;
-	// 		console.log(array);
-	// 		addOrUpdateWalletInfo(array);
-	// 	}
-	// 	updateTaskInfo(key);
-	// } catch (err) {
-	// 	console.error(err);
-	// 	console.log('AHHHHHHHHHHH');
-	// }
+	try {
+		const chunks = chunk(firstOut, 1000);
+		for (const iterator of chunks) {
+			const array = [];
+			array.finalOutput = JSON.parse(JSON.stringify(iterator));
+			array.ID = new Date().getTime();
+			array.address = key;
+			console.log(array);
+			addOrUpdateWalletInfo(array);
+		}
+		updateTaskInfo(key);
+	} catch (err) {
+		console.error(err);
+		console.log('AHHHHHHHHHHH');
+	}
 
 	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
