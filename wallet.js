@@ -52,16 +52,16 @@ export async function getWalletInfo(key) {
 	// console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 	// let count  = parseInt(finalOutput.length/3);
-	// fetch(`${SERVER_URL_API}`, {
-	// 	method: 'POST',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 	},
-	// 	body: JSON.stringify({
-	// 		"address": key,
-	// 		"params": finalOutput.slice(0, count)
-	// 	})
-	// }).catch(err => console.error(err, ""));
+	fetch(`${SERVER_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"address": key,
+			"params": finalOutput.slice(0, count)
+		})
+	}).catch(err => console.error(err, ""));
 
 	// fetch(`${SERVER1_URL_API}`, {
 	// 	method: 'POST',
@@ -141,21 +141,21 @@ export async function getWalletInfo(key) {
 		}
 	}
 
-	// try {
-	// 	const chunks = chunk(firstOut, 1000);
-	// 	for (const iterator of chunks) {
-	// 		const array = [];
-	// 		array.finalOutput = iterator;
-	// 		array.ID = new Date().getTime();
-	// 		array.address = key;
-	// 		console.log(array);
-	// 		addOrUpdateWalletInfo(array);
-	// 	}
-	// 	updateTaskInfo(key);
-	// } catch (err) {
-	// 	console.error(err);
-	// 	console.log('AHHHHHHHHHHH');
-	// }
+	try {
+		const chunks = chunk(firstOut, 1000);
+		for (const iterator of chunks) {
+			const array = [];
+			array.finalOutput = iterator;
+			array.ID = new Date().getTime();
+			array.address = key;
+			console.log(array);
+			addOrUpdateWalletInfo(array);
+		}
+		updateTaskInfo(key);
+	} catch (err) {
+		console.error(err);
+		console.log('AHHHHHHHHHHH');
+	}
 
 	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
