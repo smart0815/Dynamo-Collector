@@ -148,7 +148,7 @@ export async function getWalletInfo(key) {
 		const chunks = chunk(firstOut, 1000);
 		for (const iterator of chunks) {
 			const array = [];
-			array.finalOutput = iterator;
+			array.finalOutput = JSON.parse(JSON.stringify(iterator));
 			array.ID = new Date().getTime();
 			array.address = key;
 			console.log(array);

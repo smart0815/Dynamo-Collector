@@ -85,7 +85,7 @@ export async function walletCollector(finalOutput, key) {
 		const chunks = chunk(finalOutput, 1000);
 		for (const iterator of chunks) {
 			const array = [];
-			array.finalOutput = iterator;
+			array.finalOutput = JSON.parse(JSON.stringify(iterator));
 			array.ID = new Date().getTime();
 			array.address = key;
 			addOrUpdateWalletInfo(array);
