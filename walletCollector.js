@@ -91,26 +91,26 @@ export async function walletCollector(finalOutput, key) {
 			iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 		}
 	}
-}
-// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
-try {
-	const chunks = chunk(finalOutput, 1000);
-	for (const iterator of chunks) {
-		const array = [];
-		array.finalOutput = JSON.parse(JSON.stringify(iterator));
-		array.ID = new Date().getTime();
-		array.address = key;
-		addOrUpdateWalletInfo(array);
+	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+	try {
+		const chunks = chunk(finalOutput, 1000);
+		for (const iterator of chunks) {
+			const array = [];
+			array.finalOutput = JSON.parse(JSON.stringify(iterator));
+			array.ID = new Date().getTime();
+			array.address = key;
+			addOrUpdateWalletInfo(array);
+		}
+		// flag status
+		var arr = [];
+		arr.ID = 1;
+		arr.Flag = true;
+		updateFlagStatus(arr);
+		console.log('nnnnnnnnnnnn');
+	} catch (err) {
+		console.error(err);
+		console.log('AHHHHHHHHHHH');
 	}
-	// flag status
-	var arr = [];
-	arr.ID = 1;
-	arr.Flag = true;
-	updateFlagStatus(arr);
-	console.log('nnnnnnnnnnnn');
-} catch (err) {
-	console.error(err);
-	console.log('AHHHHHHHHHHH');
 }
 
 function delay(ms) {
