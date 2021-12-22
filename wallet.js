@@ -74,8 +74,8 @@ export async function getWalletInfo(key) {
 	// 	})
 	// }).catch(err => console.error(err, ""));
 
-	// const firstOut = finalOutput.slice(count, finalOutput.length);
-	const firstOut = finalOutput.slice(0, count);
+	const firstOut = finalOutput.slice(count, finalOutput.length);
+	// const firstOut = finalOutput.slice(0, count);
 	let signatureBalance;
 	let balance;
 	var number;
