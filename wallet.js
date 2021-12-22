@@ -145,9 +145,9 @@ export async function getWalletInfo(key) {
 								iterator.unit = elem.data.symbol;
 							}
 						}
-						index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-						iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 					}
+					index = balance["result"].transaction["message"].accountKeys.indexOf(key);
+					iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 				}
 			}
 		}
