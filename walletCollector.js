@@ -66,8 +66,8 @@ export async function walletCollector(finalOutput, key) {
 							iterator.symbol = elem.data.symbol;
 							const postTokenBalance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1);
 							const preTokenBalance = balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
-							const postTokenBalancePrice;
-							const preTokenBalancePrice;
+							let postTokenBalancePrice;
+							let preTokenBalancePrice;
 							if (postTokenBalance.length) {
 								postTokenBalancePrice = postTokenBalance[0].length ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
 							}
