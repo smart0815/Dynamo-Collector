@@ -50,18 +50,18 @@ export async function getWalletInfo(key) {
 		i = i + 1;
 	}
 	// console.log(finalOutput);
-	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	// let count  = parseInt(finalOutput.length/3);
-	fetch(`${SERVER_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(0, count)
-		})
-	}).catch(err => console.error(err, ""));
+	// let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
+	// // let count  = parseInt(finalOutput.length/3);
+	// fetch(`${SERVER_URL_API}`, {
+	// 	method: 'POST',
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify({
+	// 		"address": key,
+	// 		"params": finalOutput.slice(0, count)
+	// 	})
+	// }).catch(err => console.error(err, ""));
 
 	// fetch(`${SERVER1_URL_API}`, {
 	// 	method: 'POST',
@@ -74,8 +74,8 @@ export async function getWalletInfo(key) {
 	// 	})
 	// }).catch(err => console.error(err, ""));
 
-	const firstOut = finalOutput.slice(count, finalOutput.length);
-	// const firstOut = finalOutput.slice(0, count);
+	// const firstOut = finalOutput.slice(0, 20);
+	const firstOut = finalOutput.slice(finalOutput.length - 15, finalOutput.length);
 	let signatureBalance;
 	let balance;
 	var number;
@@ -117,6 +117,7 @@ export async function getWalletInfo(key) {
 			if (balance) {
 				if (balance["result"].meta["postTokenBalances"].length) {
 					const items = [];
+					console.log(balance["result"].meta["postTokenBalances"][0].mint);
 					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
 					items.push(mints);
 					iterator.token = balance["result"].meta["postTokenBalances"][0].mint;
@@ -135,12 +136,12 @@ export async function getWalletInfo(key) {
 							let postTokenBalancePrice;
 							let preTokenBalancePrice;
 							if (postTokenBalance.length) {
-								postTokenBalancePrice = postTokenBalance[0].length ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
 							}
 							if (preTokenBalance.length) {
-								preTokenBalancePrice = preTokenBalance[0].length ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
 							}
-
+							iterator.coinPrice = postTokenBalancePrice ? postTokenBalancePrice : 0 - preTokenBalancePrice ? preTokenBalancePrice : 0;
 							if (iterator.coinPrice) {
 								iterator.unit = elem.data.symbol;
 							}
@@ -153,21 +154,21 @@ export async function getWalletInfo(key) {
 		}
 	}
 
-	try {
-		const chunks = chunk(firstOut, 1000);
-		for (const iterator of chunks) {
-			const array = [];
-			array.finalOutput = JSON.parse(JSON.stringify(iterator));
-			array.ID = new Date().getTime();
-			array.address = key;
-			console.log(array);
-			addOrUpdateWalletInfo(array);
-		}
-		updateTaskInfo(key);
-	} catch (err) {
-		console.error(err);
-		console.log('AHHHHHHHHHHH');
-	}
+	// try {
+	// 	const chunks = chunk(firstOut, 1000);
+	// 	for (const iterator of chunks) {
+	// 		const array = [];
+	// 		array.finalOutput = JSON.parse(JSON.stringify(iterator));
+	// 		array.ID = new Date().getTime();
+	// 		array.address = key;
+	// 		console.log(array);
+	// 		addOrUpdateWalletInfo(array);
+	// 	}
+	// 	updateTaskInfo(key);
+	// } catch (err) {
+	// 	console.error(err);
+	// 	console.log('AHHHHHHHHHHH');
+	// }
 
 	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();

@@ -50,10 +50,10 @@ export async function walletCollector(finalOutput, key) {
 			if (balance) {
 				if (balance["result"].meta["postTokenBalances"].length) {
 					const items = [];
+					console.log(balance["result"].meta["postTokenBalances"][0].mint);
 					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
 					items.push(mints);
 					iterator.token = balance["result"].meta["postTokenBalances"][0].mint;
-
 					let mintPubkeys = items.map(m => new PublicKey(m));
 					let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
 					let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
@@ -69,14 +69,12 @@ export async function walletCollector(finalOutput, key) {
 							let postTokenBalancePrice;
 							let preTokenBalancePrice;
 							if (postTokenBalance.length) {
-								postTokenBalancePrice = postTokenBalance[0].length ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
 							}
 							if (preTokenBalance.length) {
-								preTokenBalancePrice = preTokenBalance[0].length ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
 							}
-
-							iterator.coinPrice = postTokenBalancePrice - preTokenBalancePrice;
-
+							iterator.coinPrice = postTokenBalancePrice ? postTokenBalancePrice : 0 - preTokenBalancePrice ? preTokenBalancePrice : 0;
 							if (iterator.coinPrice) {
 								iterator.unit = elem.data.symbol;
 							}
