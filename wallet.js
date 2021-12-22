@@ -127,20 +127,17 @@ export async function getWalletInfo(key) {
 						if (elem?.data.uri) {
 							let nftMetadtacontent = await fetch(elem.data.uri);
 							iterator.nftMetaData = await nftMetadtacontent.json();
-							index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-							iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 						}
 						else {
 							iterator.symbol = elem.data.symbol;
-							iterator.balance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1) - balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
+							iterator.coinPrice = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1) - balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
 
-							if (iterator.balance) {
+							if (iterator.coinPrice) {
 								iterator.unit = elem.data.symbol;
-							} else {
-								index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-								iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 							}
 						}
+						index = balance["result"].transaction["message"].accountKeys.indexOf(key);
+						iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 					}
 				}
 			}
