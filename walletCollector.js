@@ -66,47 +66,51 @@ export async function walletCollector(finalOutput, key) {
 							iterator.symbol = elem.data.symbol;
 							const postTokenBalance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1);
 							const preTokenBalance = balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
+							const postTokenBalancePrice;
+							const preTokenBalancePrice;
 							if (postTokenBalance.length) {
-								const postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
-								const preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								postTokenBalancePrice = postTokenBalance[0].length ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+							}
+							if (preTokenBalance.length) {
+								preTokenBalancePrice = preTokenBalance[0].length ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+							}
 
-								iterator.coinPrice = postTokenBalancePrice - preTokenBalancePrice;
+							iterator.coinPrice = postTokenBalancePrice - preTokenBalancePrice;
 
-								if (iterator.coinPrice) {
-									iterator.unit = elem.data.symbol;
-								}
+							if (iterator.coinPrice) {
+								iterator.unit = elem.data.symbol;
 							}
 						}
-						index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-						iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 					}
+					index = balance["result"].transaction["message"].accountKeys.indexOf(key);
+					iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 				}
-
-				index = balance["result"].transaction["message"].accountKeys.indexOf(key);
-				iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 			}
+
+			index = balance["result"].transaction["message"].accountKeys.indexOf(key);
+			iterator.balance = balance["result"].meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
 		}
 	}
-	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
-	try {
-		const chunks = chunk(finalOutput, 1000);
-		for (const iterator of chunks) {
-			const array = [];
-			array.finalOutput = JSON.parse(JSON.stringify(iterator));
-			array.ID = new Date().getTime();
-			array.address = key;
-			addOrUpdateWalletInfo(array);
-		}
-		// flag status
-		var arr = [];
-		arr.ID = 1;
-		arr.Flag = true;
-		updateFlagStatus(arr);
-		console.log('nnnnnnnnnnnn');
-	} catch (err) {
-		console.error(err);
-		console.log('AHHHHHHHHHHH');
+}
+// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+try {
+	const chunks = chunk(finalOutput, 1000);
+	for (const iterator of chunks) {
+		const array = [];
+		array.finalOutput = JSON.parse(JSON.stringify(iterator));
+		array.ID = new Date().getTime();
+		array.address = key;
+		addOrUpdateWalletInfo(array);
 	}
+	// flag status
+	var arr = [];
+	arr.ID = 1;
+	arr.Flag = true;
+	updateFlagStatus(arr);
+	console.log('nnnnnnnnnnnn');
+} catch (err) {
+	console.error(err);
+	console.log('AHHHHHHHHHHH');
 }
 
 function delay(ms) {

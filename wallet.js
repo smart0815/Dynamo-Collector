@@ -132,15 +132,17 @@ export async function getWalletInfo(key) {
 							iterator.symbol = elem.data.symbol;
 							const postTokenBalance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1);
 							const preTokenBalance = balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
+							const postTokenBalancePrice;
+							const preTokenBalancePrice;
 							if (postTokenBalance.length) {
-								const postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
-								const preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+								postTokenBalancePrice = postTokenBalance[0].length ? postTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+							}
+							if (preTokenBalance.length) {
+								preTokenBalancePrice = preTokenBalance[0].length ? preTokenBalance[0]["uiTokenAmount"].uiAmount : null;
+							}
 
-								iterator.coinPrice = postTokenBalancePrice - preTokenBalancePrice;
-
-								if (iterator.coinPrice) {
-									iterator.unit = elem.data.symbol;
-								}
+							if (iterator.coinPrice) {
+								iterator.unit = elem.data.symbol;
 							}
 						}
 						index = balance["result"].transaction["message"].accountKeys.indexOf(key);
