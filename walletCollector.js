@@ -52,6 +52,7 @@ export async function walletCollector(finalOutput, key) {
 					const items = [];
 					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
 					items.push(mints);
+					iterator.token = balance["result"].meta["postTokenBalances"][0].mint;
 
 					let mintPubkeys = items.map(m => new PublicKey(m));
 					let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
