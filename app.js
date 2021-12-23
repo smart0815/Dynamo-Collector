@@ -59,23 +59,21 @@ app.get('/walletInfo/:id', async (req, res) => {
 	console.log(id);
 	try {
 		const status = await getFlagStatus();
-		if (taskInfo && status.Items[0]["Flag"]) {
-			const character = await getWalletInfo(id, 1);
-			const taskInfo = await getTaskInfo(id);
-			console.log(character, taskInfo.Items);
-			if (!character.length && !taskInfo.Items.length) {
-				const array = [];
-				array.ID = new Date().getTime();
-				array.status = false;
-				array.character = "wallet";
-				array.param = id;
-				addUpdateTask(array);
-			}
-			if (status.Items[0]["Flag"]) {
-				res.send(character);
-			} else {
-				res.send([]);
-			}
+		const character = await getWalletInfo(id, 1);
+		const taskInfo = await getTaskInfo(id);
+		console.log(character, taskInfo.Items);
+		if (!character.length && !taskInfo.Items.length) {
+			const array = [];
+			array.ID = new Date().getTime();
+			array.status = false;
+			array.character = "wallet";
+			array.param = id;
+			addUpdateTask(array);
+		}
+		if (status.Items[0]["Flag"]) {
+			res.send(character);
+		} else {
+			res.send([]);
 		}
 	} catch (err) {
 		console.error(err);
