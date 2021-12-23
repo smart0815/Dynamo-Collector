@@ -52,7 +52,7 @@ export async function getWalletInfo(key) {
 	}
 	// console.log(finalOutput);
 	// let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	let count  = parseInt(finalOutput.length/4);
+	let count = parseInt(finalOutput.length / 4);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -71,7 +71,7 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(count, count*2)
+			"params": finalOutput.slice(count, count * 2)
 		})
 	}).catch(err => console.error(err, ""));
 
@@ -82,12 +82,12 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(count*2, count*3)
+			"params": finalOutput.slice(count * 2, count * 3)
 		})
 	}).catch(err => console.error(err, ""));
 
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count*3, finalOutput.length);
+	const firstOut = finalOutput.slice(count * 3, finalOutput.length);
 	let signatureBalance;
 	let balance;
 	var number;
@@ -127,37 +127,35 @@ export async function getWalletInfo(key) {
 			}
 			let index;
 			if (balance) {
-				if (balance["result"]) {
-					if (balance["result"].meta["postTokenBalances"].length) {
-						const items = [];
-						console.log(balance["result"].meta["postTokenBalances"][0].mint);
-						let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
-						items.push(mints);
-						iterator.token = balance["result"].meta["postTokenBalances"][0].mint;
-						let mintPubkeys = items.map(m => new PublicKey(m));
-						let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
-						let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
-						for (var elem of Metadata) {
-							if (elem?.data.uri) {
-								let nftMetadtacontent = await fetch(elem.data.uri);
-								iterator.nftMetaData = await nftMetadtacontent.json();
+				if (balance["result"].meta["postTokenBalances"].length) {
+					const items = [];
+					console.log(balance["result"].meta["postTokenBalances"][0].mint);
+					let mints = await getMetadataAccount(balance["result"].meta["postTokenBalances"][0].mint);
+					items.push(mints);
+					iterator.token = balance["result"].meta["postTokenBalances"][0].mint;
+					let mintPubkeys = items.map(m => new PublicKey(m));
+					let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
+					let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
+					for (var elem of Metadata) {
+						if (elem?.data.uri) {
+							let nftMetadtacontent = await fetch(elem.data.uri);
+							iterator.nftMetaData = await nftMetadtacontent.json();
+						}
+						else {
+							iterator.symbol = elem.data.symbol;
+							const postTokenBalance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1);
+							const preTokenBalance = balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
+							let postTokenBalancePrice;
+							let preTokenBalancePrice;
+							if (postTokenBalance.length) {
+								postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
 							}
-							else {
-								iterator.symbol = elem.data.symbol;
-								const postTokenBalance = balance["result"].meta["postTokenBalances"].filter(account => account.accountIndex == 1);
-								const preTokenBalance = balance["result"].meta["preTokenBalances"].filter(account => account.accountIndex == 1);
-								let postTokenBalancePrice;
-								let preTokenBalancePrice;
-								if (postTokenBalance.length) {
-									postTokenBalancePrice = postTokenBalance ? postTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
-								}
-								if (preTokenBalance.length) {
-									preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
-								}
-								iterator.coinPrice = postTokenBalancePrice ? postTokenBalancePrice : 0 - preTokenBalancePrice ? preTokenBalancePrice : 0;
-								if (iterator.coinPrice) {
-									iterator.unit = elem.data.symbol;
-								}
+							if (preTokenBalance.length) {
+								preTokenBalancePrice = preTokenBalance ? preTokenBalance[0]["uiTokenAmount"].uiAmount : 0;
+							}
+							iterator.coinPrice = postTokenBalancePrice ? postTokenBalancePrice : 0 - preTokenBalancePrice ? preTokenBalancePrice : 0;
+							if (iterator.coinPrice) {
+								iterator.unit = elem.data.symbol;
 							}
 						}
 					}
