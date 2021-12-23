@@ -90,7 +90,7 @@ export async function walletCollector(finalOutput, key) {
 	}
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 	try {
-		const chunks = chunk(finalOutput, 500);
+		const chunks = chunk(finalOutput, 200);
 		for (const iterator of chunks) {
 			const array = [];
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));

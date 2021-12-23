@@ -157,7 +157,7 @@ export async function getWalletInfo(key) {
 	}
 
 	try {
-		const chunks = chunk(firstOut, 1000);
+		const chunks = chunk(firstOut, 200);
 		for (const iterator of chunks) {
 			const array = [];
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
