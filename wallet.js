@@ -7,6 +7,7 @@ let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const SERVER_URL_API = "http://ec2-18-191-149-176.us-east-2.compute.amazonaws.com:8080/walletCollector/";
 const SERVER1_URL_API = "http://ec2-3-144-143-163.us-east-2.compute.amazonaws.com:8080/walletCollector/";
+const SERVER2_URL_API = "http://ec2-3-143-216-232.us-east-2.compute.amazonaws.com:8080/walletCollector/";
 
 async function getResults(before, key) {
 	const response = await fetch(`${MAINNET_URL_API}`, {
@@ -51,7 +52,7 @@ export async function getWalletInfo(key) {
 	}
 	// console.log(finalOutput);
 	// let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	let count  = parseInt(finalOutput.length/3);
+	let count  = parseInt(finalOutput.length/4);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -74,8 +75,19 @@ export async function getWalletInfo(key) {
 		})
 	}).catch(err => console.error(err, ""));
 
+	fetch(`${SERVER2_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"address": key,
+			"params": finalOutput.slice(count*2, count*3)
+		})
+	}).catch(err => console.error(err, ""));
+
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count*2, finalOutput.length);
+	const firstOut = finalOutput.slice(count*3, finalOutput.length);
 	let signatureBalance;
 	let balance;
 	var number;
