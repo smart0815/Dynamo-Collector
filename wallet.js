@@ -50,9 +50,8 @@ export async function getWalletInfo(key) {
 		i = i + 1;
 	}
 	// console.log(finalOutput);
-	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	let count1 = count.length % 2 == 0 ? count.length / 2 : count.length / 2 + 0.5;
-	// // let count  = parseInt(finalOutput.length/3);
+	// let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
+	let count  = parseInt(finalOutput.length/3);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -60,23 +59,23 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(0, count1)
+			"params": finalOutput.slice(0, count)
 		})
 	}).catch(err => console.error(err, ""));
 
-	// fetch(`${SERVER1_URL_API}`, {
-	// 	method: 'POST',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 	},
-	// 	body: JSON.stringify({
-	// 		"address": key,
-	// 		"params": finalOutput.slice(count, count*2)
-	// 	})
-	// }).catch(err => console.error(err, ""));
+	fetch(`${SERVER1_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"address": key,
+			"params": finalOutput.slice(count, count*2)
+		})
+	}).catch(err => console.error(err, ""));
 
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count1, count);
+	const firstOut = finalOutput.slice(count*2, finalOutput.length);
 	let signatureBalance;
 	let balance;
 	var number;
