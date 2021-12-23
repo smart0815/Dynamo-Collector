@@ -51,6 +51,7 @@ export async function getWalletInfo(key) {
 	}
 	// console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
+	let count1 = count.length % 2 == 0 ? count.length / 2 : count.length / 2 + 0.5;
 	// // let count  = parseInt(finalOutput.length/3);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
@@ -59,7 +60,7 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(0, count)
+			"params": finalOutput.slice(0, count1)
 		})
 	}).catch(err => console.error(err, ""));
 
@@ -75,7 +76,7 @@ export async function getWalletInfo(key) {
 	// }).catch(err => console.error(err, ""));
 
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count, finalOutput.length);
+	const firstOut = finalOutput.slice(count1, count);
 	let signatureBalance;
 	let balance;
 	var number;
