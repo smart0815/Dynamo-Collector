@@ -21,6 +21,7 @@ import {
 	deleteCharacter,
 	getCharacterById,
 	getTaskInfo,
+	getFlagStatus,
 } from './dynamo1.js';
 
 import { walletCollector } from './walletCollector.js'
@@ -57,18 +58,25 @@ app.get('/walletInfo/:id', async (req, res) => {
 	const id = req.params.id;
 	console.log(id);
 	try {
-		const character = await getWalletInfo(id, 1);
-		const taskInfo = await getTaskInfo(id);
-		console.log(character, taskInfo.Items);
-		if (!character.length && !taskInfo.Items.length) {
-			const array = [];
-			array.ID = new Date().getTime();
-			array.status = false;
-			array.character = "wallet";
-			array.param = id;
-			addUpdateTask(array);
+		const status = await getFlagStatus();
+		if (taskInfo && status.Items[0]["Flag"]) {
+			const character = await getWalletInfo(id, 1);
+			const taskInfo = await getTaskInfo(id);
+			console.log(character, taskInfo.Items);
+			if (!character.length && !taskInfo.Items.length) {
+				const array = [];
+				array.ID = new Date().getTime();
+				array.status = false;
+				array.character = "wallet";
+				array.param = id;
+				addUpdateTask(array);
+			}
+			if (status.Items[0]["Flag"]) {
+				res.send(character);
+			} else {
+				res.send([]);
+			}
 		}
-		res.send(character);
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ err: 'Something went wrong' });
