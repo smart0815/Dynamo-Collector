@@ -71,6 +71,13 @@ export const addOrUpdateWalletInfo = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
+export const getFlagStatus = async () => {
+	const params = {
+		TableName: FLAG_TABLE
+	};
+	return await dynamoClient.scan(params).promise();
+};
+
 export const updateFlagStatus = async (character) => {
 	const params = {
 		TableName: FLAG_TABLE,
