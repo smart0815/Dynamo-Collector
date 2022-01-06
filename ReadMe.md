@@ -1,1 +1,1 @@
-# Harry Potter API with Dynamo DB, Nodejs, and Expressjs
+# SolScan API with Dynamo DB, Nodejs, and Expressjs
