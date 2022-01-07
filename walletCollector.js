@@ -96,11 +96,7 @@ export async function walletCollector(finalOutput, key) {
 			array.address = key;
 			addOrUpdateWalletInfo(array);
 		}
-		// flag status
-		var arr = [];
-		arr.ID = 1;
-		arr.Flag = true;
-		updateFlagStatus(arr);
+
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
 		console.error(err);

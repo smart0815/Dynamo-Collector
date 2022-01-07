@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
-import { addOrUpdateWalletInfo, updateTaskInfo } from './dynamo1.js';
+import { addOrUpdateWalletInfo, updateTaskInfo, updateFlagStatus } from './dynamo1.js';
+
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
@@ -31,7 +32,7 @@ async function getResults(before, key) {
 	return response;
 }
 
-export async function getWalletInfo(key) {
+export async function getWalletInfo(key, preLen) {
 	let finalOutput = [];
 	let i = 0;
 	while (true) {
@@ -50,45 +51,54 @@ export async function getWalletInfo(key) {
 		}
 		i = i + 1;
 	}
+	// updateTaskInfo(key, finalOutput.length);
 	// console.log(finalOutput);
-	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
-	let count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
-	console.log(count1, count, count + count1, finalOutput.length);
-	fetch(`${SERVER_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(0, count1)
-		})
-	}).catch(err => console.error(err, ""));
+	var count;
+	var count1;
+	let TotalLen = finalOutput.length - preLen;
 
-	fetch(`${SERVER1_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(count1, count)
-		})
-	}).catch(err => console.error(err, ""));
+	if (TotalLen > 100) {
+		count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
+		count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
+		console.log(count, count1);
+		// return;
+		console.log(count1, count, count + count1, TotalLen);
+		fetch(`${SERVER_URL_API}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				"address": key,
+				"params": finalOutput.slice(0, count1)
+			})
+		}).catch(err => console.error(err, ""));
 
-	fetch(`${SERVER2_URL_API}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"address": key,
-			"params": finalOutput.slice(count, count + count1)
-		})
-	}).catch(err => console.error(err, ""));
+		fetch(`${SERVER1_URL_API}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				"address": key,
+				"params": finalOutput.slice(count1, count)
+			})
+		}).catch(err => console.error(err, ""));
 
-	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count + count1, finalOutput.length);
+		fetch(`${SERVER2_URL_API}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				"address": key,
+				"params": finalOutput.slice(count, count + count1)
+			})
+		}).catch(err => console.error(err, ""));
+		// const firstOut = finalOutput.slice(0, 20);
+	}
+	var firstOut = TotalLen > 100 ? finalOutput.slice(count + count1, TotalLen) : finalOutput.slice(0, TotalLen);
+
 	let signatureBalance;
 	let balance;
 	var number;
@@ -177,7 +187,12 @@ export async function getWalletInfo(key) {
 			console.log(array);
 			addOrUpdateWalletInfo(array);
 		}
-		updateTaskInfo(key);
+		// flag status
+		var arr = [];
+		arr.ID = 1;
+		arr.Flag = true;
+		updateFlagStatus(arr);
+		updateTaskInfo(key, finalOutput.length, true);
 	} catch (err) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
@@ -208,5 +223,3 @@ function chunk(array, size) {
 	}
 	return ret;
 }
-
-getWalletInfo('H7E4JB8ebHaoKQe2Z3NAwXniKcuy7VVuAoycx7PYAbE9');
