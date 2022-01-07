@@ -49,14 +49,15 @@ const getTaskInfo = async (address) => {
 	var taskInfo = await dynamoClient.scan(params).promise();
 	console.log(taskInfo);
 	if (taskInfo && status.Items[0]["Flag"]) {
-		if (taskInfo.Items[0].character == 'wallet') {
-			var arr = [];
-			arr.ID = 1;
-			arr.Flag = false;
-			updateFlagStatus(arr);
-			getWalletInfo(taskInfo.Items[0].param);
-			console.log("really?");
-		}
+		// if (taskInfo.Items[0].character == 'wallet') {
+		// console.log(taskInfo.Items[0].param, taskInfo.Items[0].character);
+		var arr = [];
+		arr.ID = 1;
+		arr.Flag = false;
+		updateFlagStatus(arr);
+		getWalletInfo(taskInfo.Items[0].param, taskInfo.Items[0].character);
+		console.log("really?");
+		// }
 	}
 };
 
