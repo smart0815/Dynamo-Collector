@@ -128,9 +128,6 @@ export async function getWalletInfo(key) {
 			}
 			let index;
 			if (balance) {
-				console.log('mmmmmmmmmmmmm');
-				console.log(balance);
-				console.log('mmmmmmmmmmmmm');
 				if (balance["result"]?.meta["postTokenBalances"]?.length) {
 					const items = [];
 					console.log(balance["result"].meta["postTokenBalances"][0].mint);
