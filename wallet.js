@@ -53,7 +53,7 @@ export async function getWalletInfo(key) {
 	// console.log(finalOutput);
 	let count = finalOutput.length % 2 == 0 ? finalOutput.length / 2 : finalOutput.length / 2 + 0.5;
 	let count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
-	console.log(count1, count, count+count1, finalOutput.length);
+	console.log(count1, count, count + count1, finalOutput.length);
 	fetch(`${SERVER_URL_API}`, {
 		method: 'POST',
 		headers: {
@@ -83,16 +83,16 @@ export async function getWalletInfo(key) {
 		},
 		body: JSON.stringify({
 			"address": key,
-			"params": finalOutput.slice(count, count+count1)
+			"params": finalOutput.slice(count, count + count1)
 		})
 	}).catch(err => console.error(err, ""));
 
 	// const firstOut = finalOutput.slice(0, 20);
-	const firstOut = finalOutput.slice(count+count1, finalOutput.length);
+	const firstOut = finalOutput.slice(count + count1, finalOutput.length);
 	let signatureBalance;
 	let balance;
-	var number;
-	number = 0;
+	// var number;
+	// number = 0;
 	for (const iterator of firstOut) {
 		// number++
 		// console.log(number);
@@ -191,7 +191,6 @@ function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-
 function chunk(array, size) {
 	if (size <= 0 || !Number.isInteger(size)) {
 		throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
@@ -209,3 +208,5 @@ function chunk(array, size) {
 	}
 	return ret;
 }
+
+getWalletInfo('H7E4JB8ebHaoKQe2Z3NAwXniKcuy7VVuAoycx7PYAbE9');
