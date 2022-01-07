@@ -2,6 +2,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import { header_middleware } from "./middlewares/header.js";
 import cors from 'cors';
+import fetch from "node-fetch";
+
+const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
 const app = express();
 // parse application/x-www-form-urlencoded
@@ -21,6 +24,7 @@ import {
 	deleteCharacter,
 	getCharacterById,
 	getTaskInfo,
+	updateTaskInfo,
 	getFlagStatus,
 } from './dynamo1.js';
 
@@ -61,16 +65,22 @@ app.get('/walletInfo/:id', async (req, res) => {
 		const status = await getFlagStatus();
 		const character = await getWalletInfo(id, 1);
 		const taskInfo = await getTaskInfo(id);
-		console.log(character, taskInfo.Items);
+		const walletCnt = await getWalletCnt(id);
+		const preCnt = taskInfo.Items.length ? taskInfo.Items[0].character : 0;
+		// console.log(walletCnt, preCnt, taskInfo.Items);
 		if (!character.length && !taskInfo.Items.length) {
 			const array = [];
 			array.ID = new Date().getTime();
 			array.status = false;
-			array.character = "wallet";
+			array.character = 0;
 			array.param = id;
 			addUpdateTask(array);
 		}
-		if (status.Items[0]["Flag"]) {
+		else if (walletCnt > preCnt) {
+			updateTaskInfo(id, preCnt, false);
+		}
+		// if (status.Items[0]["Flag"]) {
+		if (taskInfo.Items[0].status) {
 			res.send(character);
 		} else {
 			res.send([]);
@@ -80,6 +90,51 @@ app.get('/walletInfo/:id', async (req, res) => {
 		res.status(500).json({ err: 'Something went wrong' });
 	}
 });
+
+async function getWalletCnt(key) {
+	let finalOutput = [];
+	let i = 0;
+	while (true) {
+		let response;
+		if (i > 0)
+			response = await getResults(finalOutput.slice(-1).pop().signature, key);
+		else
+			response = await getResults(null, key);
+		let json = await response.json();
+		let result = json.result;
+
+		if (result.length > 0) {
+			finalOutput = [...finalOutput, ...result];
+		} else {
+			break;
+		}
+		i = i + 1;
+	}
+
+	return finalOutput.length;
+}
+
+async function getResults(before, key) {
+	const response = await fetch(`${MAINNET_URL_API}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"jsonrpc": "2.0",
+			"id": 2,
+			"method": "getSignaturesForAddress",
+			"params": [
+				key,
+				{
+					"limit": 1000,
+					"before": before
+				}
+			]
+		}),
+	});
+	return response;
+}
 
 app.get('/transactionInfo/:id', async (req, res) => {
 	const id = req.params.id;
