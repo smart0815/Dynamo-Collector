@@ -109,7 +109,7 @@ export const addUpdateTask = async (character) => {
 	return await dynamoClient.put(params).promise();
 };
 
-export const updateTaskInfo = async (character) => {
+export const updateTaskInfo = async (character, len, status) => {
 	var params = {
 		TableName: TASK_TABLE,
 		KeyConditionExpression: "#cat = :findValue",
@@ -123,7 +123,8 @@ export const updateTaskInfo = async (character) => {
 	};
 
 	var updateParam = await dynamoClient.scan(params).promise();
-	updateParam.Items[0].status = true;
+	updateParam.Items[0].status = status;
+	updateParam.Items[0].character = len;
 	addUpdateTask(updateParam.Items[0]);
 };
 
@@ -160,5 +161,5 @@ export const getWalletInfo = async (address, info) => {
 		params.ExclusiveStartKey = items.LastEvaluatedKey;
 	} while (typeof items.LastEvaluatedKey !== "undefined");
 	return scanResults;
-	// console.log(await dynamoClient.scan(params).promise())
+	// console.log(scanResults)
 };
