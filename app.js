@@ -67,6 +67,7 @@ app.get('/walletInfo/:id', async (req, res) => {
 		const taskInfo = await getTaskInfo(id);
 		const walletCnt = await getWalletCnt(id);
 		const preCnt = taskInfo.Items.length ? taskInfo.Items[0].character : 0;
+		// console.log(walletCnt, preCnt);
 		// console.log(walletCnt, preCnt, taskInfo.Items);
 		if (!character.length && !taskInfo.Items.length) {
 			const array = [];
@@ -76,12 +77,13 @@ app.get('/walletInfo/:id', async (req, res) => {
 			array.param = id;
 			addUpdateTask(array);
 		}
-		else if (walletCnt > preCnt) {
-			updateTaskInfo(id, preCnt, false);
-		}
 		// if (status.Items[0]["Flag"]) {
 		if (taskInfo.Items[0].status) {
-			res.send(character);
+			if (walletCnt > preCnt) {
+				updateTaskInfo(id, preCnt, false);
+			} else {
+				res.send(character);
+			}
 		} else {
 			res.send([]);
 		}
@@ -177,7 +179,6 @@ app.post('/walletCollector', async (req, res) => {
 
 app.post('/transactionCollector', async (req, res) => {
 	try {
-		console.log('mmmmmmmmmmmmmmmmmmmmmmm');
 		const character = await transactionCollector(req.body.params, req.body.address);
 		res.json(character);
 	} catch (err) {
