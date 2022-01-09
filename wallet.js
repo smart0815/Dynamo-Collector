@@ -249,4 +249,4 @@ function chunk(array, size) {
 	return ret;
 }
 
-getWalletInfo('EpEGkcJdXbbwFPyTgyStTUDbu19WKPBsLQj8wgs4Tea7', 0);
+getWalletInfo('8w6wKQD4YAqN3RDczWVjQY88EXbFaDF5NMc7m4ZoCenJ', 0);
