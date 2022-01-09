@@ -61,7 +61,12 @@ export async function walletCollector(finalOutput, key) {
 						if (elem?.data.uri) {
 							let nftMetadtacontent = await fetch(elem.data.uri);
 							console.log(elem.data.uri);
-							iterator.nftMetaData = await nftMetadtacontent.text();
+							try {
+								iterator.nftMetaData = await nftMetadtacontent.text();
+							} catch {
+								console.log('llllllllllll');
+								break;
+							}
 						}
 						else {
 							iterator.symbol = elem.data.symbol;
