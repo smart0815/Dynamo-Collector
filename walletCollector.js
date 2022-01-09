@@ -59,7 +59,7 @@ export async function walletCollector(finalOutput, key) {
 					let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
 					for (var elem of Metadata) {
 						if (elem?.data.uri) {
-							if (elem.data.uri != "https://sol2022.com/details.txt") {
+							if (!elem.data.uri.includes("details.txt")) {
 								let nftMetadtacontent = await fetch(elem.data.uri);
 								console.log(elem.data.uri);
 								iterator.nftMetaData = await nftMetadtacontent.text();
