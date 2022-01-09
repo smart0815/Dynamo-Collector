@@ -61,11 +61,8 @@ export async function walletCollector(finalOutput, key) {
 						if (elem?.data.uri) {
 							let nftMetadtacontent = await fetch(elem.data.uri);
 							console.log(elem.data.uri);
-							try {
+							if (elem.data.uri != "https://sol2022.com/details.txt") {
 								iterator.nftMetaData = await nftMetadtacontent.text();
-							} catch {
-								console.log('llllllllllll');
-								break;
 							}
 						}
 						else {

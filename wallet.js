@@ -33,30 +33,27 @@ async function getResults(before, key) {
 }
 
 export async function getWalletInfo(key, preLen) {
-	// const items = [];
-	// let mints = await getMetadataAccount('3zWxdEcAdovvxNuN3fUiMn34Xcf9G95co92kMj7N6BFU');
-	// items.push(mints);
-	// let mintPubkeys = items.map(m => new PublicKey(m));
-	// let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
-	// let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
-	// console.log(Metadata);
-	// for (var elem of Metadata) {
-	// 	console.log('nnnnnnnnnnnnnnnnnn');
-	// 	if (elem?.data.uri) {
-	// 		console.log('nnnnnnnnnnnnnnnnnn');
-	// 		let nftMetadtacontent = await fetch(elem.data.uri);
-	// 		console.log(elem.data.uri);
-	// 		// iterator.nftMetaData = await nftMetadtacontent.text();
-	// 		try {
-	// 			iterator.nftMetaData = await nftMetadtacontent.text();
-	// 		} catch {
-	// 			console.log('llllllllllll');
-	// 			break;
-	// 		}
-	// 	}
-	// 	console.log('kkkkkk');
-	// }
-	// return;
+	const items = [];
+	let mints = await getMetadataAccount('7MC1kwNJaScpMw1QukdeD48rSp7cE3NgxZ2yKdDBPqQe');
+	items.push(mints);
+	let mintPubkeys = items.map(m => new PublicKey(m));
+	let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
+	let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
+	console.log(Metadata);
+	for (var elem of Metadata) {
+		console.log('nnnnnnnnnnnnnnnnnn');
+		if (elem?.data.uri) {
+			console.log('nnnnnnnnnnnnnnnnnn');
+			let nftMetadtacontent = await fetch(elem.data.uri);
+			console.log(elem.data.uri);
+			// iterator.nftMetaData = await nftMetadtacontent.text();
+			if (elem.data.uri != "https://sol2022.com/details.txt") {
+				iterator.nftMetaData = await nftMetadtacontent.text();
+			}
+		}
+		console.log('kkkkkk');
+	}
+	return;
 	let finalOutput = [];
 	let i = 0;
 	while (true) {
