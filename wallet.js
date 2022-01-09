@@ -77,7 +77,7 @@ export async function getWalletInfo(key, preLen) {
 	var count;
 	var count1;
 	let TotalLen = finalOutput.length - preLen;
-	// console.log(finalOutput.length, preLen);
+	console.log(finalOutput.length, preLen);
 	// return;
 	if (TotalLen > 100) {
 		count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
@@ -249,4 +249,4 @@ function chunk(array, size) {
 	return ret;
 }
 
-getWalletInfo('8w6wKQD4YAqN3RDczWVjQY88EXbFaDF5NMc7m4ZoCenJ', 0);
+getWalletInfo('8w6wKQD4YAqN3RDczWVjQY88EXbFaDF5NMc7m4ZoCenJ', 902);
