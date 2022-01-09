@@ -222,7 +222,7 @@ export async function getWalletInfo(key, preLen) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
 	}
-
+	console.log('cool');
 	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
@@ -249,4 +249,4 @@ function chunk(array, size) {
 	return ret;
 }
 
-getWalletInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds', 0);
+getWalletInfo('EpEGkcJdXbbwFPyTgyStTUDbu19WKPBsLQj8wgs4Tea7', 0);
