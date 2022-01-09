@@ -173,7 +173,7 @@ export async function getWalletInfo(key, preLen) {
 					}
 				}
 				index = balance["result"]?.transaction["message"].accountKeys.indexOf(key);
-				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
+				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 			}
 		}
 	}
@@ -225,4 +225,4 @@ function chunk(array, size) {
 	return ret;
 }
 
-getWalletInfo('DSmFLpmqwPjwhA9c1dDaDA4m3RHZpRBPFv47GuSfZsQ3', 0);
+getWalletInfo('3b57b18hRgAFy9tJGAh7kkWLxQRpn9edHinyfKEeC8Ds', 0);

@@ -82,7 +82,7 @@ export async function walletCollector(finalOutput, key) {
 					}
 				}
 				index = balance["result"]?.transaction["message"].accountKeys.indexOf(key);
-				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"].meta["preBalances"][index];
+				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 			}
 		}
 	}
