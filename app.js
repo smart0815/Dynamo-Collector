@@ -76,14 +76,17 @@ app.get('/walletInfo/:id', async (req, res) => {
 			array.character = 0;
 			array.param = id;
 			addUpdateTask(array);
+		} else if (walletCnt > preCnt) {
+			updateTaskInfo(id, preCnt, false);
 		}
 		// if (status.Items[0]["Flag"]) {
 		if (taskInfo.Items[0].status) {
-			if (walletCnt > preCnt) {
-				updateTaskInfo(id, preCnt, false);
-			} else {
-				res.send(character);
-			}
+			// console.log('here');
+			// console.log(walletCnt, preCnt);
+			// } else {
+			// console.log(character);
+			res.send(character);
+			// }
 		} else {
 			res.send([]);
 		}
