@@ -74,6 +74,7 @@ export async function getWalletInfo(key, preLen) {
 	}
 	// updateTaskInfo(key, finalOutput.length);
 	console.log(finalOutput.length);
+	// return;
 	var count;
 	var count1;
 	let TotalLen = finalOutput.length - preLen;
@@ -249,4 +250,4 @@ function chunk(array, size) {
 	return ret;
 }
 
-getWalletInfo('BYxyiQMNiVJx7QoCXJeXbWCtLiGr6dphXZ7EFQMmPAEk', 0);
+// getWalletInfo('F7Do32qyoFAGof4LaeU5gHEiZYz8wfFAgogbmGXdczqE', 0);
