@@ -198,7 +198,6 @@ export async function getWalletInfo(key, preLen) {
 		console.error(err);
 		console.log('AHHHHHHHHHHH');
 	}
-	console.log('cool');
 	return true;
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 }
