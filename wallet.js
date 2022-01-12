@@ -74,17 +74,13 @@ export async function getWalletInfo(key, preLen) {
 	}
 	// updateTaskInfo(key, finalOutput.length);
 	console.log(finalOutput.length);
-	// return;
 	var count;
 	var count1;
 	let TotalLen = finalOutput.length - preLen;
 	console.log(finalOutput.length, preLen);
-	// return;
 	if (TotalLen > 100) {
 		count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
 		count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
-		console.log(count, count1);
-		// return;
 		console.log(count1, count, count + count1, TotalLen);
 		fetch(`${SERVER_URL_API}`, {
 			method: 'POST',
