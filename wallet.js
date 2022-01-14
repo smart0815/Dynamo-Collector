@@ -53,55 +53,56 @@ export async function getWalletInfo(key, preLen) {
 	}
 	// updateTaskInfo(key, finalOutput.length);
 	console.log(finalOutput.length);
-	var count;
-	var count1;
-	let TotalLen = finalOutput.length - preLen;
-	console.log(finalOutput.length, preLen);
-	if (TotalLen > 100) {
-		count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
-		count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
-		console.log(count1, count, count + count1, TotalLen);
-		fetch(`${SERVER_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(0, count1)
-			})
-		}).catch(err => console.error(err, ""));
+	// var count;
+	// var count1;
+	// let TotalLen = finalOutput.length - preLen;
+	// console.log(finalOutput.length, preLen);
+	// if (TotalLen > 100) {
+	// 	count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
+	// 	count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
+	// 	console.log(count1, count, count + count1, TotalLen);
+	// 	fetch(`${SERVER_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(0, count1)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
 
-		fetch(`${SERVER1_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(count1, count)
-			})
-		}).catch(err => console.error(err, ""));
+	// 	fetch(`${SERVER1_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(count1, count)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
 
-		fetch(`${SERVER2_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(count, count + count1)
-			})
-		}).catch(err => console.error(err, ""));
-		// const firstOut = finalOutput.slice(0, 20);
-	}
-	var firstOut = TotalLen > 100 ? finalOutput.slice(count + count1, TotalLen) : finalOutput.slice(0, TotalLen);
+	// 	fetch(`${SERVER2_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(count, count + count1)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
+	// 	// const firstOut = finalOutput.slice(0, 20);
+	// }
+	// var firstOut = TotalLen > 100 ? finalOutput.slice(count + count1, TotalLen) : finalOutput.slice(0, TotalLen);
 
 	let signatureBalance;
 	let balance;
 	var number;
 	number = 0;
-	for (const iterator of firstOut) {
+	await Promise.all(finalOutput.map(async iterator => {
+		// for (const iterator of firstOut) {
 		number++
 		console.log(number);
 		if (!iterator.err) {
@@ -176,7 +177,7 @@ export async function getWalletInfo(key, preLen) {
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 			}
 		}
-	}
+	}));
 
 	try {
 		const chunks = chunk(firstOut, 200);
