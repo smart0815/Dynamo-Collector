@@ -52,6 +52,7 @@ export async function getWalletInfo(key, preLen) {
 	let finalOutput = [];
 	let i = 0;
 	while (true) {
+		console.log('here');
 		let response;
 		if (i > 0)
 			response = await getResults(finalOutput.slice(-1).pop().signature, key);
