@@ -33,6 +33,22 @@ async function getResults(before, key) {
 }
 
 export async function getWalletInfo(key, preLen) {
+	// const items = [];
+	// let mints = await getMetadataAccount('CULBDZ1oF94TvBiJRnSv7JZrJQSyX6aFTvVvCrX8zUat');
+	// items.push(mints);
+	// let mintPubkeys = items.map(m => new PublicKey(m));
+	// let multipleAccounts = await connection.getMultipleAccountsInfo(mintPubkeys);
+	// let Metadata = multipleAccounts.filter(account => account !== null).map(account => decodeMetadata(account.data));
+	// for (var elem of Metadata) {
+	// 	if (elem?.data.uri) {
+	// 		if (!elem.data.uri.includes("details.txt")) {
+	// 			let nftMetadtacontent = await fetch(elem.data.uri);
+	// 			console.log(elem.data.uri);
+	// 			iterator.nftMetaData = await nftMetadtacontent.text();
+	// 		}
+	// 	}
+	// }
+	// return;
 	let finalOutput = [];
 	let i = 0;
 	while (true) {
@@ -57,51 +73,51 @@ export async function getWalletInfo(key, preLen) {
 	var count1;
 	let TotalLen = finalOutput.length - preLen;
 	console.log(finalOutput.length, preLen);
-	if (TotalLen > 100) {
-		count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
-		count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
-		console.log(count1, count, count + count1, TotalLen);
-		fetch(`${SERVER_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(0, count1)
-			})
-		}).catch(err => console.error(err, ""));
+	// if (TotalLen > 100) {
+	// 	count = TotalLen % 2 == 0 ? TotalLen / 2 : TotalLen / 2 + 0.5;
+	// 	count1 = count % 2 == 0 ? count / 2 : count / 2 + 0.5;
+	// 	console.log(count1, count, count + count1, TotalLen);
+	// 	fetch(`${SERVER_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(0, count1)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
 
-		fetch(`${SERVER1_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(count1, count)
-			})
-		}).catch(err => console.error(err, ""));
+	// 	fetch(`${SERVER1_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(count1, count)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
 
-		fetch(`${SERVER2_URL_API}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				"address": key,
-				"params": finalOutput.slice(count, count + count1)
-			})
-		}).catch(err => console.error(err, ""));
-		// const firstOut = finalOutput.slice(0, 20);
-	}
-	var firstOut = TotalLen > 100 ? finalOutput.slice(count + count1, TotalLen) : finalOutput.slice(0, TotalLen);
+	// 	fetch(`${SERVER2_URL_API}`, {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			"address": key,
+	// 			"params": finalOutput.slice(count, count + count1)
+	// 		})
+	// 	}).catch(err => console.error(err, ""));
+	// 	// const firstOut = finalOutput.slice(0, 20);
+	// }
+	// var firstOut = TotalLen > 100 ? finalOutput.slice(count + count1, TotalLen) : finalOutput.slice(0, TotalLen);
 
 	let signatureBalance;
 	let balance;
 	var number;
 	number = 0;
-	for (const iterator of firstOut) {
+	for (const iterator of finalOutput) {
 		// await Promise.all(finalOutput.map(async iterator => {
 		number++
 		console.log(number);
