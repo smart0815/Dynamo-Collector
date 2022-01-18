@@ -4,8 +4,8 @@ import AWS from 'aws-sdk';
 
 AWS.config.update({
 	region: 'us-east-2',
-	accessKeyId: 'AKIAYIGNUXI7JYJLYFP3',
-	secretAccessKey: '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',
+	accessKeyId: 'AKIAYIGNUXI7NTYMEU67',
+	secretAccessKey: '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',
 });
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
@@ -155,11 +155,15 @@ export const getWalletInfo = async (address, info) => {
 	// });
 	const scanResults = [];
 	let items;
+	
 	do {
 		items = await dynamoClient.scan(params).promise();
+		console.log(items);
 		items.Items.forEach((item) => scanResults.push(item));
 		params.ExclusiveStartKey = items.LastEvaluatedKey;
 	} while (typeof items.LastEvaluatedKey !== "undefined");
-	return scanResults;
-	// console.log(scanResults)
+	// return scanResults;
+	console.log(scanResults)
 };
+
+getWalletInfo('DSmFLpmqwPjwhA9c1dDaDA4m3RHZpRBPFv47GuSfZsQ3', 1)

@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 
 AWS.config.update({
 	region: 'us-east-2',
-	accessKeyId: 'AKIAYIGNUXI7JYJLYFP3',
-	secretAccessKey: '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',
+	accessKeyId: 'AKIAYIGNUXI7NTYMEU67',
+	secretAccessKey: 'xYeYdAvLPJlPSTEFtmmvF0mwTmvwP1mgiIx0eJU',
 	paramValidation: false
 });
 
@@ -32,7 +32,7 @@ const updateFlagStatus = async (character) => {
 
 const getTaskInfo = async (address) => {
 	const status = await getFlagStatus();
-	console.log(status);
+	// console.log(status);
 
 	var params = {
 		TableName: TASK_TABLE,
@@ -54,9 +54,11 @@ const getTaskInfo = async (address) => {
 		var arr = [];
 		arr.ID = 1;
 		arr.Flag = false;
-		updateFlagStatus(arr);
-		getWalletInfo(taskInfo.Items[0].param, taskInfo.Items[0].character);
-		console.log("really?");
+		// updateFlagStatus(arr);
+		// getWalletInfo(taskInfo.Items[0].param, taskInfo.Items[0].character);
+		console.log("really?")
+		console.log(taskInfo.Items[0].param);
+		console.log("really?")
 		// }
 	}
 };
