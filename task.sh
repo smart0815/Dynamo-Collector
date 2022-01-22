@@ -1,1 +1,0 @@
-node /var/crontab/task.js
