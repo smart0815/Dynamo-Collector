@@ -1,14 +1,16 @@
 import fetch from "node-fetch";
-import { addOrUpdateWalletInfo, updateFlagStatus } from './dynamo1.js';
+import AWS from 'aws-sdk';
+
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
-export async function walletCollector(finalOutput, key) {
-	console.log(key);
-	console.log('here')
+export async function walletCollector(walletParams) {
+	// console.log(finalOutput, key);
+	console.log(walletParams);
+	return;
 	let signatureBalance;
 	let balance;
 	var number;
