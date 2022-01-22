@@ -7,15 +7,25 @@ let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
+const AWS_SERVER_TABLE = 'server_status';
+const dynamoClient;
 export async function walletCollector(walletParams) {
+	AWS.config.update({
+		region: walletParams.region,
+		accessKeyId: walletParams.accessKeyId,
+		secretAccessKey: walletParams.secretAccessKey,
+	});
+
+	dynamoClient = new AWS.DynamoDB.DocumentClient();
+
+	await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
+
 	// console.log(finalOutput, key);
-	console.log(walletParams);
-	return;
 	let signatureBalance;
 	let balance;
 	var number;
 	number = 0;
-	for (const iterator of finalOutput) {
+	for (const iterator of walletParams.params) {
 		number++
 		console.log(number);
 		if (!iterator.err) {
@@ -86,7 +96,7 @@ export async function walletCollector(walletParams) {
 						}
 					}
 				}
-				index = balance["result"]?.transaction["message"].accountKeys.indexOf(key);
+				index = balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address);
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 			}
 		}
@@ -98,9 +108,10 @@ export async function walletCollector(walletParams) {
 			const array = [];
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
 			array.ID = new Date().getTime();
-			array.address = key;
+			array.address = walletParams.address;
 			addOrUpdateWalletInfo(array);
 		}
+		await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
 
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
@@ -130,3 +141,31 @@ function chunk(array, size) {
 	}
 	return ret;
 }
+
+const updateServerStatus = async (serverUrl, status, statusType) => {
+	var params = {
+		TableName: TASK_TABLE,
+		KeyConditionExpression: "#cat = :findValue",
+		FilterExpression: '#cat = :findValue',
+		ExpressionAttributeNames: {
+			'#cat': 'param',
+		},
+		ExpressionAttributeValues: {
+			':findValue': serverUrl,
+		},
+	};
+
+	var updateParam = await dynamoClient.scan(params).promise();
+	updateParam.Items[0].status = status;
+	updateParam.Items[0].type = statusType;
+
+	addUpdateTask(updateParam.Items[0]);
+};
+
+const addOrUpdateWalletInfo = async (character) => {
+	const params = {
+		TableName: WALLET_TABLE,
+		Item: character,
+	};
+	return await dynamoClient.put(params).promise();
+};
