@@ -1,11 +1,12 @@
 // const AWS = require('aws-sdk');
 import AWS from 'aws-sdk';
 // require('dotenv').config();
+// AWS.config.update({ region: 'REGION' });
 
 AWS.config.update({
-	region: 'us-east-2',
-	accessKeyId: 'AKIAYIGNUXI7NTYMEU67',
-	secretAccessKey: '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',
+	// region: 'us-east-2',
+	// accessKeyId: 'AKIAYIGNUXI7NTYMEU67',
+	// secretAccessKey: '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',
 });
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
@@ -155,7 +156,7 @@ export const getWalletInfo = async (address, info) => {
 	// });
 	const scanResults = [];
 	let items;
-	
+
 	do {
 		items = await dynamoClient.scan(params).promise();
 		console.log(items);
