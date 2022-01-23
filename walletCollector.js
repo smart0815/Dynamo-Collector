@@ -17,7 +17,7 @@ export async function walletCollector(walletParams) {
 		secretAccessKey: walletParams.secretAccessKey,
 	});
 
-	const	dynamoClient = new AWS.DynamoDB.DocumentClient();
+	const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 	var params = {
 		TableName: AWS_SERVER_TABLE,
@@ -35,7 +35,7 @@ export async function walletCollector(walletParams) {
 	updateParam.Items[0].status = 'running';
 	updateParam.Items[0].type = 'wallet-data-task';
 
-	const params = {
+	var params = {
 		TableName: AWS_SERVER_TABLE,
 		Item: updateParam.Items[0],
 	};
@@ -132,7 +132,7 @@ export async function walletCollector(walletParams) {
 			array.ID = new Date().getTime();
 			array.address = walletParams.address;
 			// addOrUpdateWalletInfo(array);
-			const params = {
+			var params = {
 				TableName: WALLET_TABLE,
 				Item: array,
 			};
@@ -155,7 +155,7 @@ export async function walletCollector(walletParams) {
 		updateParam.Items[0].status = false;
 		updateParam.Items[0].type = null;
 
-		const params = {
+		var params = {
 			TableName: AWS_SERVER_TABLE,
 			Item: updateParam.Items[0],
 		};
@@ -212,7 +212,7 @@ const updateServerStatus = async (serverUrl, status, statusType) => {
 };
 
 const addOrUpdateWalletInfo = async (character) => {
-	const params = {
+	var params = {
 		TableName: WALLET_TABLE,
 		Item: character,
 	};
