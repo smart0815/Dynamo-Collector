@@ -4,6 +4,9 @@ import AWS from 'aws-sdk';
 // AWS.config.update({ region: 'REGION' });
 
 AWS.config.update({
+	// region: ,
+	// accessKeyId: ,
+	// secretAccessKey: ,
 });
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
