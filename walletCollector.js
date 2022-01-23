@@ -147,32 +147,18 @@ export async function walletCollector(walletParams) {
 			return await dynamoClient.put(params).promise();
 		}
 		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
-		var params = {
-			TableName: AWS_SERVER_TABLE,
-			KeyConditionExpression: "#cat = :findValue",
-			FilterExpression: '#cat = :findValue',
-			ExpressionAttributeNames: {
-				'#cat': 'server',
-			},
-			ExpressionAttributeValues: {
-				':findValue': walletParams.server,
-			},
-		};
-
-		var updateParam = await dynamoClient.scan(params).promise();
+		console.log(updateParam);
 		updateParam.Items[0].status = 'null';
 		updateParam.Items[0].type = 'null';
-
-		console.log('ccccccccccccccccccccccccccccccccc');
-
+	
 		var params = {
 			TableName: AWS_SERVER_TABLE,
 			Item: updateParam.Items[0],
 		};
 		// console.log(character);
+		console.log('putput');
 		await dynamoClient.put(params).promise();
+		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
 
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
