@@ -10,7 +10,6 @@ const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802
 const AWS_SERVER_TABLE = 'server_status';
 const WALLET_TABLE = 'Wallet_status';
 
-const dynamoClient;
 export async function walletCollector(walletParams) {
 	AWS.config.update({
 		region: walletParams.region,
@@ -18,7 +17,7 @@ export async function walletCollector(walletParams) {
 		secretAccessKey: walletParams.secretAccessKey,
 	});
 
-	dynamoClient = new AWS.DynamoDB.DocumentClient();
+	const	dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 	var params = {
 		TableName: AWS_SERVER_TABLE,
