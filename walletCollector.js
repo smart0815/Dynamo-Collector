@@ -11,6 +11,7 @@ const AWS_SERVER_TABLE = 'server_status';
 const WALLET_TABLE = 'Wallet_status';
 
 export async function walletCollector(walletParams) {
+	console.log(walletParams);
 	AWS.config.update({
 		region: walletParams.region,
 		accessKeyId: walletParams.accessKeyId,
@@ -40,6 +41,7 @@ export async function walletCollector(walletParams) {
 		Item: updateParam.Items[0],
 	};
 	// console.log(character);
+	console.log('putput');
 	await dynamoClient.put(params).promise();
 
 	// console.log(finalOutput, key);
@@ -47,6 +49,7 @@ export async function walletCollector(walletParams) {
 	let balance;
 	var number;
 	number = 0;
+	console.log('here');
 	for (const iterator of walletParams.params) {
 		number++
 		console.log(number);
