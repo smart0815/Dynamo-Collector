@@ -130,6 +130,8 @@ export async function walletCollector(walletParams) {
 		}
 	}
 	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
+	console.log('vvvvvvvvvvvvvvvvvvvvvvvvvv');
+
 	try {
 		const chunks = chunk(finalOutput, 200);
 		for (const iterator of chunks) {
@@ -144,6 +146,8 @@ export async function walletCollector(walletParams) {
 			};
 			return await dynamoClient.put(params).promise();
 		}
+		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa');
+
 		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
 		var params = {
 			TableName: AWS_SERVER_TABLE,
@@ -158,8 +162,10 @@ export async function walletCollector(walletParams) {
 		};
 
 		var updateParam = await dynamoClient.scan(params).promise();
-		updateParam.Items[0].status = false;
-		updateParam.Items[0].type = null;
+		updateParam.Items[0].status = 'null';
+		updateParam.Items[0].type = 'null';
+
+		console.log('ccccccccccccccccccccccccccccccccc');
 
 		var params = {
 			TableName: AWS_SERVER_TABLE,
