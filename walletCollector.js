@@ -8,6 +8,8 @@ let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
 const AWS_SERVER_TABLE = 'server_status';
+const WALLET_TABLE = 'Wallet_status';
+
 const dynamoClient;
 export async function walletCollector(walletParams) {
 	AWS.config.update({
@@ -18,7 +20,28 @@ export async function walletCollector(walletParams) {
 
 	dynamoClient = new AWS.DynamoDB.DocumentClient();
 
-	await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
+	var params = {
+		TableName: AWS_SERVER_TABLE,
+		KeyConditionExpression: "#cat = :findValue",
+		FilterExpression: '#cat = :findValue',
+		ExpressionAttributeNames: {
+			'#cat': 'param',
+		},
+		ExpressionAttributeValues: {
+			':findValue': serverArr[i].server,
+		},
+	};
+
+	var updateParam = await dynamoClient.scan(params).promise();
+	updateParam.Items[0].status = 'running';
+	updateParam.Items[0].type = 'wallet-data-task';
+
+	const params = {
+		TableName: AWS_SERVER_TABLE,
+		Item: updateParam.Items[0],
+	};
+	// console.log(character);
+	await dynamoClient.put(params).promise();
 
 	// console.log(finalOutput, key);
 	let signatureBalance;
@@ -109,9 +132,36 @@ export async function walletCollector(walletParams) {
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
 			array.ID = new Date().getTime();
 			array.address = walletParams.address;
-			addOrUpdateWalletInfo(array);
+			// addOrUpdateWalletInfo(array);
+			const params = {
+				TableName: WALLET_TABLE,
+				Item: array,
+			};
+			return await dynamoClient.put(params).promise();
 		}
-		await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
+		// await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
+		var params = {
+			TableName: AWS_SERVER_TABLE,
+			KeyConditionExpression: "#cat = :findValue",
+			FilterExpression: '#cat = :findValue',
+			ExpressionAttributeNames: {
+				'#cat': 'param',
+			},
+			ExpressionAttributeValues: {
+				':findValue': serverArr[i].server,
+			},
+		};
+
+		var updateParam = await dynamoClient.scan(params).promise();
+		updateParam.Items[0].status = false;
+		updateParam.Items[0].type = null;
+
+		const params = {
+			TableName: AWS_SERVER_TABLE,
+			Item: updateParam.Items[0],
+		};
+		// console.log(character);
+		await dynamoClient.put(params).promise();
 
 		console.log('nnnnnnnnnnnn');
 	} catch (err) {
