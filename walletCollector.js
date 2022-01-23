@@ -27,7 +27,7 @@ export async function walletCollector(walletParams) {
 			'#cat': 'param',
 		},
 		ExpressionAttributeValues: {
-			':findValue': serverArr[i].server,
+			':findValue': walletParams.server,
 		},
 	};
 
@@ -138,7 +138,7 @@ export async function walletCollector(walletParams) {
 			};
 			return await dynamoClient.put(params).promise();
 		}
-		// await updateServerStatus(serverArr[i].server, 'running', 'wallet-data-task');
+		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
 		var params = {
 			TableName: AWS_SERVER_TABLE,
 			KeyConditionExpression: "#cat = :findValue",
@@ -147,7 +147,7 @@ export async function walletCollector(walletParams) {
 				'#cat': 'param',
 			},
 			ExpressionAttributeValues: {
-				':findValue': serverArr[i].server,
+				':findValue': walletParams.server,
 			},
 		};
 
