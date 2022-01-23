@@ -144,7 +144,7 @@ export async function walletCollector(walletParams) {
 				TableName: WALLET_TABLE,
 				Item: array,
 			};
-			return await dynamoClient.put(params).promise();
+			await dynamoClient.put(params).promise();
 		}
 		console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa');
 		console.log(updateParam);
