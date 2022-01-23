@@ -25,7 +25,7 @@ export async function walletCollector(walletParams) {
 		KeyConditionExpression: "#cat = :findValue",
 		FilterExpression: '#cat = :findValue',
 		ExpressionAttributeNames: {
-			'#cat': 'param',
+			'#cat': 'server',
 		},
 		ExpressionAttributeValues: {
 			':findValue': walletParams.server,
@@ -33,6 +33,8 @@ export async function walletCollector(walletParams) {
 	};
 
 	var updateParam = await dynamoClient.scan(params).promise();
+	console.log(updateParam);
+	console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
 	updateParam.Items[0].status = 'running';
 	updateParam.Items[0].type = 'wallet-data-task';
 
@@ -147,7 +149,7 @@ export async function walletCollector(walletParams) {
 			KeyConditionExpression: "#cat = :findValue",
 			FilterExpression: '#cat = :findValue',
 			ExpressionAttributeNames: {
-				'#cat': 'param',
+				'#cat': 'server',
 			},
 			ExpressionAttributeValues: {
 				':findValue': walletParams.server,
@@ -200,7 +202,7 @@ const updateServerStatus = async (serverUrl, status, statusType) => {
 		KeyConditionExpression: "#cat = :findValue",
 		FilterExpression: '#cat = :findValue',
 		ExpressionAttributeNames: {
-			'#cat': 'param',
+			'#cat': 'server',
 		},
 		ExpressionAttributeValues: {
 			':findValue': serverUrl,
