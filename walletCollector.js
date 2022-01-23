@@ -52,7 +52,8 @@ export async function walletCollector(walletParams) {
 	var number;
 	number = 0;
 	console.log('here');
-	for (const iterator of walletParams.params) {
+	var finalOutput = walletParams.params;
+	for (const iterator of finalOutput) {
 		number++
 		console.log(number);
 		if (!iterator.err) {
