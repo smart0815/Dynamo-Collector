@@ -152,7 +152,7 @@ export async function walletCollector(walletParams) {
 			TableName: AWS_SERVER_TABLE,
 			Item: updateParam.Items[0],
 		};
-		// console.log(character);
+
 		console.log('putput');
 		await dynamoClient.put(params).promise();
 		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
