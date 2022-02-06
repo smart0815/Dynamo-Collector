@@ -8,7 +8,7 @@ let milliseconds = 11000;
 const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 
 const AWS_SERVER_TABLE = 'server_status';
-const WALLET_TABLE = 'Wallet_status';
+const WALLET_TABLE = 'Wallet_history';
 
 export async function walletCollector(walletParams) {
 	console.log(walletParams);
