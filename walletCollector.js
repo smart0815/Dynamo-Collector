@@ -130,14 +130,16 @@ export async function walletCollector(walletParams) {
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
 							console.log(balance["result"].transaction["message"].accountKeys[k]);
 							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[k];
+							break;
 						}
 					}
 				} else if (iterator.balance > 0) {
-					for (var lj = index; lj > 0; lj--) {
+					for (var lj = index-1; lj > -1; lj--) {
 						var bal = balance["result"].meta["postBalances"][lj] - balance["result"].meta["preBalances"][lj];
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
 							console.log(balance["result"].transaction["message"].accountKeys[lj]);
 							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[lj];
+							break;
 						}
 					}
 				}
