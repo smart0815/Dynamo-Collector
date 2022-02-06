@@ -41,11 +41,9 @@ export async function walletCollector(walletParams) {
 		TableName: AWS_SERVER_TABLE,
 		Item: updateParam.Items[0],
 	};
-	// console.log(character);
 	console.log('putput');
 	await dynamoClient.put(params).promise();
 
-	// console.log(finalOutput, key);
 	let signatureBalance;
 	let balance;
 	var number;
@@ -125,10 +123,27 @@ export async function walletCollector(walletParams) {
 				}
 				index = balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address);
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
+
+				if (iterator.balance < 0) {
+					for (var i = 1; i < balance["result"].transaction["message"].accountKeys.length; i++) {
+						var bal = balance["result"].meta["postBalances"][i] - balance["result"].meta["preBalances"][i];
+						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
+							console.log(balance["result"].transaction["message"].accountKeys[i]);
+							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[i];
+						}
+					}
+				} else if (iterator.balance > 0) {
+					for (var i = index; i > 0; i--) {
+						var bal = balance["result"].meta["postBalances"][i] - balance["result"].meta["preBalances"][i];
+						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
+							console.log(balance["result"].transaction["message"].accountKeys[i]);
+							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[i];
+						}
+					}
+				}
 			}
 		}
 	}
-	// return finalOutput.filter((entry) => entry.balance != undefined).reverse();
 
 	try {
 		const chunks = chunk(finalOutput, 200);
@@ -137,7 +152,6 @@ export async function walletCollector(walletParams) {
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
 			array.ID = new Date().getTime();
 			array.address = walletParams.address;
-			// addOrUpdateWalletInfo(array);
 			var params = {
 				TableName: WALLET_TABLE,
 				Item: array,
@@ -157,10 +171,8 @@ export async function walletCollector(walletParams) {
 		await dynamoClient.put(params).promise();
 		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
 
-		console.log('nnnnnnnnnnnn');
 	} catch (err) {
 		console.error(err);
-		console.log('AHHHHHHHHHHH');
 	}
 }
 
