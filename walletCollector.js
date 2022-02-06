@@ -125,19 +125,19 @@ export async function walletCollector(walletParams) {
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 
 				if (iterator.balance < 0) {
-					for (var i = 1; i < balance["result"].transaction["message"].accountKeys.length; i++) {
-						var bal = balance["result"].meta["postBalances"][i] - balance["result"].meta["preBalances"][i];
+					for (var k = 1; k < balance["result"].transaction["message"].accountKeys.length; k++) {
+						var bal = balance["result"].meta["postBalances"][k] - balance["result"].meta["preBalances"][k];
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
-							console.log(balance["result"].transaction["message"].accountKeys[i]);
-							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[i];
+							console.log(balance["result"].transaction["message"].accountKeys[k]);
+							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[k];
 						}
 					}
 				} else if (iterator.balance > 0) {
-					for (var i = index; i > 0; i--) {
-						var bal = balance["result"].meta["postBalances"][i] - balance["result"].meta["preBalances"][i];
+					for (var lj = index; lj > 0; lj--) {
+						var bal = balance["result"].meta["postBalances"][lj] - balance["result"].meta["preBalances"][lj];
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
-							console.log(balance["result"].transaction["message"].accountKeys[i]);
-							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[i];
+							console.log(balance["result"].transaction["message"].accountKeys[lj]);
+							iterator.correlaccount = balance["result"].transaction["message"].accountKeys[lj];
 						}
 					}
 				}
