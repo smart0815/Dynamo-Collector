@@ -148,7 +148,7 @@ export async function walletCollector(walletParams) {
 	}
 
 	try {
-		const chunks = chunk(finalOutput, 200);
+		const chunks = chunk(finalOutput, 100);
 		for (const iterator of chunks) {
 			const array = [];
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
