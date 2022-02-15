@@ -123,7 +123,7 @@ export async function walletCollector(walletParams) {
 				}
 				index = balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address);
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
-				iterator.txHistory = balance;
+				// iterator.txHistory = balance;
 				if (iterator.balance < 0) {
 					for (var k = 1; k < balance["result"].transaction["message"].accountKeys.length; k++) {
 						var bal = balance["result"].meta["postBalances"][k] - balance["result"].meta["preBalances"][k];
@@ -148,7 +148,7 @@ export async function walletCollector(walletParams) {
 	}
 
 	try {
-		const chunks = chunk(finalOutput, 100);
+		const chunks = chunk(finalOutput, 200);
 		for (const iterator of chunks) {
 			const array = [];
 			array.finalOutput = JSON.parse(JSON.stringify(iterator));
