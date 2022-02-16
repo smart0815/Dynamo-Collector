@@ -133,7 +133,7 @@ export async function walletCollector(walletParams) {
 							break;
 						}
 					}
-				} else if (iterator.balance > 0) {
+				} else {
 					for (var lj = index-1; lj > -1; lj--) {
 						var bal = balance["result"].meta["postBalances"][lj] - balance["result"].meta["preBalances"][lj];
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
