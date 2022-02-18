@@ -33,7 +33,7 @@ export async function walletCollector(walletParams) {
 	};
 
 	var updateParam = await dynamoClient.scan(params).promise();
-	console.log(updateParam);
+
 	updateParam.Items[0].status = 'running';
 	updateParam.Items[0].type = 'wallet-data-task';
 
@@ -41,14 +41,14 @@ export async function walletCollector(walletParams) {
 		TableName: AWS_SERVER_TABLE,
 		Item: updateParam.Items[0],
 	};
-	console.log('putput');
+
 	await dynamoClient.put(params).promise();
 
 	let signatureBalance;
 	let balance;
 	var number;
 	number = 0;
-	console.log('here');
+
 	var finalOutput = walletParams.params;
 	for (const iterator of finalOutput) {
 		number++
