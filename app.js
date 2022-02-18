@@ -16,7 +16,8 @@ app.use(bodyParser.json({ limit: 1024 * 1024 * 50, type: 'application/json' }))
 app.use(cors());
 app.use(header_middleware);
 
-import { walletCollector } from './walletCollector.js'
+import { walletCollector } from './walletCollector.js';
+import { purchaserCollector } from './purchaserCollector.js';
 // const { getTransaction } = require('./wallet');
 // app.use(cors());
 
@@ -31,6 +32,19 @@ app.post('/walletCollector', async (req, res) => {
 
 	try {
 		const character = await walletCollector(req.body);
+		res.json(character);
+	} catch (err) {
+		console.error(err);
+	}
+});
+
+app.post('/purchaserCollector', async (req, res) => {
+	app.use(bodyParser.json());
+	app.use(bodyParser.json({ limit: '50mb' }));
+	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+
+	try {
+		const character = await purchaserCollector(req.body);
 		res.json(character);
 	} catch (err) {
 		console.error(err);
