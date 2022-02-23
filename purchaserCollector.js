@@ -5,11 +5,11 @@ import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 
 // const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const MAINNET_URL_API = "https://api.mainnet-beta.solana.com";
-const SOLSCAN_URL_API = "https://api.solscan.io";
+const SOLSCAN_URL_API = "https://public-api.solscan.io	";
 
-const connection = new Connection("https://api.metaplex.solana.com");
+const CONNECTION = new Connection("https://api.mainnet-beta.solana.com/");
 const milliseconds = 11000;
-
+const SERVER_INSTANCE_COUNT = 400;
 const PURCHASER_TABLE = 'purchaser_info';
 const AWS_SERVER_TABLE = 'server_status';
 
@@ -90,6 +90,7 @@ const getSignature = async (token) => {
 		const thirdTransaction = transaction["result"].slice(-3, -2).pop() ? transaction["result"].slice(-3, -2).pop().signature : secondTransaction;
 		const fourthTransaction = transaction["result"].slice(-4, -3).pop() ? transaction["result"].slice(-4, -3).pop().signature : thirdTransaction;
 
+		// todo: getcamps
 		await getCamps(token, transaction["result"].length, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
 	} catch (error) {
 		console.log("Ups!! An error was caught", error);
@@ -97,15 +98,17 @@ const getSignature = async (token) => {
 }
 
 const getSol = async (token, offset, blockTime, fromTime) => {
-	return await fetch(`${SOLSCAN_URL_API}/account/soltransfer/txs?address=${token}&fromTime=${blockTime - fromTime * 86400000}&toTime=${blockTime}&offset=${offset}&limit=10`, {
+	var soltransaction = await fetch(`${SOLSCAN_URL_API}/account/solTransfers?account=${accountKey}&fromTime=${blockTime - fromTime * 86400000}&toTime=${blockTime}&offset=${offset}&limit=50`, {
 		method: "GET",
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	});
+	return soltransaction;
 }
 
 const getCamps = async (token, num, firstSignature, secondSignature, thirdSignature, fourthSignature) => {
+	const tokenBalance = await CONNECTION.getBalance(new PublicKey(token));
 	const firstResponse = await fetch(`${MAINNET_URL_API}`, {
 		method: "POST",
 		headers: {
@@ -186,19 +189,19 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		if (firstTransaction["result"].transaction.message.accountKeys[0] == thirdTransaction["result"].transaction.message.accountKeys[0]) {
 			if (firstTransaction["result"].transaction.message.accountKeys[0] == fourthTransaction["result"].transaction.message.accountKeys[0]) {
 			} else {
-				if (Math.abs(fourthBalance) < 10000000) {
+				if (Math.abs(fourthBalance) < tokenBalance) {
 					detectPurchaser = fourthTransaction["result"].transaction.message.accountKeys[0];
 					balance = fourthBalance;
 				}
 			}
 		} else {
-			if (Math.abs(thirdBalance) < 10000000) {
+			if (Math.abs(thirdBalance) < tokenBalance) {
 				detectPurchaser = thirdTransaction["result"].transaction.message.accountKeys[0];
 				balance = thirdBalance;
 			}
 		}
 	} else {
-		if (Math.abs(secondBalance) < 10000000) {
+		if (Math.abs(secondBalance) < tokenBalance) {
 			detectPurchaser = secondTransaction["result"].transaction.message.accountKeys[0];
 			balance = secondBalance;
 		}
@@ -208,12 +211,13 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		let i = 0;
 		while (true) {
 			const accountKey = firstTransaction.result.transaction.message.accountKeys[0];
-			const getResponseSol = async () => await getSol(accountKey, i * 10, firstTransaction.result.blockTime, 3); // This is an arrow function for re-usability
+			const getResponseSol = async () => await getSol(accountKey, i * 50, firstTransaction.result.blockTime, 3); // This is an arrow function for re-usability
 			let response;
 
 			for (let i = 0; i < 5; i++) {
 				try {
 					response = await getResponseSol();
+
 					if (response.status === 429) {
 						await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 						continue;
@@ -231,7 +235,8 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 				return;
 			}
 			let json = await response?.json();
-			let result = json?.data?.tx?.transactions;
+			// let result = json?.data?.tx?.transactions;
+			let result = json?.data;
 			if (result?.length > 0) {
 				finalOutputFromCamps = [...finalOutputFromCamps, ...result];
 			} else {
@@ -259,7 +264,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		}
 		_price = _buy - _sold;
 
-		if (_price < 9000000) {
+		if (_price < tokenBalance) {
 			detectPurchaser = undefined;
 		}
 	}
@@ -279,17 +284,18 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 			nftMetaData = await nftMetadtacontent.json();
 		}
 	}
+	// console.log(token, firstTransaction["result"].transaction.message.accountKeys[0], detectPurchaser ? detectPurchaser : firstTransaction["result"].transaction.message.accountKeys[0], num, firstTransaction["result"].blockTime, nftMetaData);
 
 	const array = [];
 	array.ID = new Date().getTime();
-	array.token = token,
-		array.firstPurchaser = firstTransaction["result"].transaction.message.accountKeys[0],
-		array.detectPurchaser = detectPurchaser ? detectPurchaser : firstTransaction["result"].transaction.message.accountKeys[0],
-		array.transactions = num,
-		array.blockTime = firstTransaction["result"].blockTime,
-		array.nftMetaDataName = nftMetaData.name,
-		array.nftMetaDataImg = nftMetaData.image,
-		array.nftMetaData = nftMetaData
+	array.token = token;
+	array.firstPurchaser = firstTransaction["result"].transaction.message.accountKeys[0];
+	array.detectPurchaser = detectPurchaser ? detectPurchaser : firstTransaction["result"].transaction.message.accountKeys[0];
+	array.transactions = num;
+	array.blockTime = firstTransaction["result"].blockTime;
+	array.nftMetaDataName = nftMetaData.name;
+	array.nftMetaDataImg = nftMetaData.image;
+	array.nftMetaData = nftMetaData;
 
 	addOrUpdatePurchaserInfo(array);
 }
@@ -306,5 +312,3 @@ const addOrUpdatePurchaserInfo = async (character) => {
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-getMintAddresses();
