@@ -144,12 +144,13 @@ export async function walletCollector(walletParams) {
 					}
 				}
 
+				var NFTBalance = iterator.balance ? iterator.balance : 0;
 				if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: MintNft")) {
 					iterator.NFTtype = "Minted";
 				} else if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: Sell")) {
 					iterator.NFTtype = "Listed";
-				} else {
-					iterator.NFTtype = iterator.balance > 0 ? "Sold" : "Bought";
+				} else if (NFTBalance) {
+					iterator.NFTtype = NFTBalance > 0 ? "Sold" : "Bought";
 				}
 			}
 		}
