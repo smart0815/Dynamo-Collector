@@ -134,7 +134,7 @@ export async function walletCollector(walletParams) {
 						}
 					}
 				} else {
-					for (var lj = index-1; lj > -1; lj--) {
+					for (var lj = index - 1; lj > -1; lj--) {
 						var bal = balance["result"].meta["postBalances"][lj] - balance["result"].meta["preBalances"][lj];
 						if (bal * 0.000000001 != 0.00203928 && bal * 0.000000001 != -0.00203928 && bal * 0.000000001 != 0.0014616 && bal * 0.000000001 != -0.0014616 && bal != 0) {
 							console.log(balance["result"].transaction["message"].accountKeys[lj]);
@@ -142,6 +142,14 @@ export async function walletCollector(walletParams) {
 							break;
 						}
 					}
+				}
+
+				if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: MintNft")) {
+					iterator.NFTtype = "Minted";
+				} else if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: Sell")) {
+					iterator.NFTtype = "Listed";
+				} else {
+					iterator.NFTtype = iterator.balance > 0 ? "Sold" : "Bought";
 				}
 			}
 		}
@@ -169,7 +177,6 @@ export async function walletCollector(walletParams) {
 			Item: updateParam.Items[0],
 		};
 
-		console.log('putput');
 		await dynamoClient.put(params).promise();
 		// await updateServerStatus(walletParams.server, 'running', 'wallet-data-task');
 
