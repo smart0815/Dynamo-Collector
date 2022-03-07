@@ -145,12 +145,30 @@ export async function walletCollector(walletParams) {
 				}
 
 				var NFTBalance = iterator.balance ? iterator.balance : 0;
-				if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: MintNft")) {
-					iterator.NFTtype = "Minted";
-				} else if (balance["result"]["meta"]["logMessages"].join().includes("Instruction: Sell")) {
-					iterator.NFTtype = "Listed";
-				} else if (NFTBalance) {
-					iterator.NFTtype = NFTBalance > 0 ? "Sold" : "Bought";
+				var logMsg;
+				try {
+					logMsg = balance["result"]["meta"]["logMessages"].join();
+				} catch (error) {
+				}
+
+				if (logMsg) {
+					if (logMsg.includes("Instruction: MintNft")) {
+						iterator.NFTtype = "Minted";
+					} else if (logMsg.includes("Instruction: Sell")) {
+						iterator.NFTtype = "Listed";
+					} else if (NFTBalance) {
+						iterator.NFTtype = NFTBalance > 0 ? "Sold" : "Bought";
+					}
+
+					var cancels = 0;
+					for (var i = 0; i < balance["result"]?.transaction["message"].accountKeys.length; i++) {
+						if (balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address) == 0 && balance["result"]?.transaction["message"].accountKeys[i] == walletParams.address) {
+							cancels++
+						}
+					}
+					if (cancels > 1) {
+						iterator.NFTtype = "Cancel"
+					}
 				}
 			}
 		}
