@@ -156,18 +156,10 @@ export async function walletCollector(walletParams) {
 						iterator.NFTtype = "Minted";
 					} else if (logMsg.includes("Instruction: Sell")) {
 						iterator.NFTtype = "Listed";
+					} else if (logMsg.includes("Sale cancelled by seller")) {
+						iterator.NFTtype = "Cancel";
 					} else if (NFTBalance) {
 						iterator.NFTtype = NFTBalance > 0 ? "Sold" : "Bought";
-					}
-
-					var cancels = 0;
-					for (var i = 0; i < balance["result"]?.transaction["message"].accountKeys.length; i++) {
-						if (balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address) == 0 && balance["result"]?.transaction["message"].accountKeys[i] == walletParams.address) {
-							cancels++
-						}
-					}
-					if (cancels > 1) {
-						iterator.NFTtype = "Cancel"
 					}
 				}
 			}
