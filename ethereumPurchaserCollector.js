@@ -1,5 +1,6 @@
 import axios from "axios";
 import fetch from "node-fetch";
+import AWS from 'aws-sdk';
 
 var moralis_api_key;
 var nftInfo;
