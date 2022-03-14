@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 var moralis_api_key;
 var nftInfo;
 var dynamoClient;
-
+const AWS_SERVER_TABLE = 'server_status';
 const getHash = async (accountKey, num, offset) => {
 	var hash = await fetch(`https://deep-index.moralis.io/api/v2/nft/${accountKey}/${num}/transfers?chain=eth&format=decimal&offset=${offset}`, {
 		"method": "GET",
