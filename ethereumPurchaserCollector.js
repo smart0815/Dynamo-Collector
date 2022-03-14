@@ -252,5 +252,3 @@ const addOrUpdateCharacter = async (character, table_name) => {
 	};
 	return await dynamoClient.put(params).promise();
 };
-
-getEthereumPurchaserInfo();
