@@ -41,7 +41,7 @@ const getUsersHistory = async (accountKey, fromTime, toTime, offset) => {
 	return getUserHistoryInfo;
 }
 
-async function getEthereumPurchaserCollector(ethereumParams) {
+export async function getEthereumPurchaserCollector(ethereumParams) {
 	moralis_api_key = ethereumParams.moraliskey;
 	nftInfo = ethereumParams.accountkey;
 
