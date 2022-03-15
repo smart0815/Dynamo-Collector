@@ -239,7 +239,6 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 		nftImage = nftImageData.image_small;
 		nftImageName = nftImageData.name;
 	} catch (error) {
-		nftImageData = nftUrl;
 		nftImage = nftUrl;
 	}
 
@@ -256,7 +255,6 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.collection = "FLUF";
 	array.collectionkey = nftInfo;
 	array.nftMetaDataImg = nftImage;
-	array.nftMetaData = nftImageData;
 
 	await addOrUpdateCharacter(array, 'Purchaser');
 }
