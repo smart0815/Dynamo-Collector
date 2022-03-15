@@ -236,7 +236,7 @@ const updateTransaction = async (token_id, nftName, nftdata, symbol, nftUrl, tra
 	array.price = tokenBalance;
 	array.nftMetaDataName = nftName;
 	array.symbol = symbol;
-	array.nftMetaDataImg = nftdata ? JSON.parse(nftdata).image : nftUrl;
+	array.nftMetaDataImg = nftdata ? JSON.parse(nftdata).image_small ? JSON.parse(nftdata).image_small : JSON.parse(nftdata).image : nftUrl;
 	array.nftMetaData = nftUrl;
 
 	await addOrUpdateCharacter(array, 'Purchaser');
