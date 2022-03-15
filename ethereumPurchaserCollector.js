@@ -241,7 +241,6 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	} catch (error) {
 		nftImageData = nftUrl;
 		nftImage = nftUrl;
-		nftImageName = token_id;
 	}
 
 	const array = [];
@@ -253,8 +252,8 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.contractType = contractType;
 	array.blockTime = blockTime;
 	array.price = tokenBalance;
-	array.nftMetaDataName = nftImageName;
-	array.collection = nftName;
+	array.nftMetaDataName = nftImageName ? nftImageName : token_id;
+	array.collection = "FLUF";
 	array.nftMetaDataImg = nftImage;
 	array.nftMetaData = nftImageData;
 
