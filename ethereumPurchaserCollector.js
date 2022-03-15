@@ -81,7 +81,7 @@ export async function getEthereumPurchaserCollector(ethereumParams) {
 	var finalTx = ethereumParams.params;
 
 	for (const iterator of finalTx) {
-		await getPurchaserfunc(iterator.token_id, iterator.name, iterator.metadata, iterator.symbol, iterator.token_uri, iterator.contract_type);
+		await getPurchaserfunc(iterator.token_id, iterator.name, iterator.token_uri, iterator.contract_type);
 	}
 
 	updateParam.Items[0].status = null;
@@ -95,7 +95,7 @@ export async function getEthereumPurchaserCollector(ethereumParams) {
 	await dynamoClient.put(params).promise();
 }
 
-const getPurchaserfunc = async (token_id, nftName, nftdata, symbol, nftUrl, contractType) => {
+const getPurchaserfunc = async (token_id, nftName, nftUrl, contractType) => {
 	try {
 		let finalPurchaserHash = [];
 		let i = 0;
@@ -136,13 +136,13 @@ const getPurchaserfunc = async (token_id, nftName, nftdata, symbol, nftUrl, cont
 		const thirdTransaction = finalPurchaserHash.slice(-3, -2).pop() ? finalPurchaserHash.slice(-3, -2).pop() : secondTransaction;
 		const fourthTransaction = finalPurchaserHash.slice(-4, -3).pop() ? finalPurchaserHash.slice(-4, -3).pop() : thirdTransaction;
 
-		await updateTransaction(nftInfo + "/" + token_id, nftName, nftdata, symbol, nftUrl, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
+		await updateTransaction(nftInfo + "/" + token_id, nftName, nftUrl, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
 	} catch (error) {
 		console.log("Ups!! An error was caught", error);
 	}
 }
 
-const updateTransaction = async (token_id, nftName, nftdata, symbol, nftUrl, transactionLen, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction) => {
+const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction) => {
 	const firstHashInfo = await getTransaction(firstTransaction.transaction_hash);
 	const secondHashInfo = await getTransaction(secondTransaction.transaction_hash);
 	const thirdHashInfo = await getTransaction(thirdTransaction.transaction_hash);
@@ -225,6 +225,25 @@ const updateTransaction = async (token_id, nftName, nftdata, symbol, nftUrl, tra
 		detectPurchaser = undefined;
 	}
 
+	var nftImage;
+	var nftImageData;
+	var nftImageName;
+	try {
+		var imageData = await fetch(`${nftUrl}`, {
+			"method": "GET",
+			"headers": {
+				"accept": "application/json",
+			}
+		});
+		nftImageData = await imageData.json();
+		nftImage = nftImageData.image_small;
+		nftImageName = nftImageData.name;
+	} catch (error) {
+		nftImageData = nftUrl;
+		nftImage = nftUrl;
+		nftImageName = token_id;
+	}
+
 	const array = [];
 	array.ID = new Date().getTime();
 	array.token = token_id;
@@ -234,10 +253,10 @@ const updateTransaction = async (token_id, nftName, nftdata, symbol, nftUrl, tra
 	array.contractType = contractType;
 	array.blockTime = blockTime;
 	array.price = tokenBalance;
-	array.nftMetaDataName = nftName;
-	array.symbol = symbol;
-	array.nftMetaDataImg = nftdata ? JSON.parse(nftdata).image_small ? JSON.parse(nftdata).image_small : JSON.parse(nftdata).image : nftUrl;
-	array.nftMetaData = nftUrl;
+	array.nftMetaDataName = nftImageName;
+	array.collection = nftName;
+	array.nftMetaDataImg = nftImage;
+	array.nftMetaData = nftImageData;
 
 	await addOrUpdateCharacter(array, 'Purchaser');
 }
