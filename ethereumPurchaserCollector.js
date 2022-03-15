@@ -136,7 +136,7 @@ const getPurchaserfunc = async (token_id, nftName, nftUrl, contractType) => {
 		const thirdTransaction = finalPurchaserHash.slice(-3, -2).pop() ? finalPurchaserHash.slice(-3, -2).pop() : secondTransaction;
 		const fourthTransaction = finalPurchaserHash.slice(-4, -3).pop() ? finalPurchaserHash.slice(-4, -3).pop() : thirdTransaction;
 
-		await updateTransaction(nftInfo + "/" + token_id, nftName, nftUrl, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
+		await updateTransaction(token_id, nftName, nftUrl, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
 	} catch (error) {
 		console.log("Ups!! An error was caught", error);
 	}
@@ -254,6 +254,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.price = tokenBalance;
 	array.nftMetaDataName = nftImageName ? nftImageName : token_id;
 	array.collection = "FLUF";
+	array.collectionkey = nftInfo;
 	array.nftMetaDataImg = nftImage;
 	array.nftMetaData = nftImageData;
 
