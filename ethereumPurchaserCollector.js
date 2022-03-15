@@ -253,7 +253,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.price = tokenBalance;
 	array.nftMetaDataName = nftImageName ? nftImageName : nftName + ' #' + token_id;
 	array.nftMetaDataImg = nftImage;
-	array.collection = "FLUF";
+	array.collection = nftName;
 	array.collectionkey = nftInfo;
 
 	await addOrUpdateCharacter(array, 'Purchaser');
