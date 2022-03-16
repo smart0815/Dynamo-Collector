@@ -14,8 +14,10 @@ const PURCHASER_TABLE = 'purchaser_info';
 const AWS_SERVER_TABLE = 'server_status';
 
 var dynamoClient;
-
+var updateParam;
+var collectionKey;
 export async function purchaserCollector(purchaserParam) {
+	collectionKey = purchaserParam.collectionKey;
 
 	AWS.config.update({
 		region: purchaserParam.region,
@@ -37,7 +39,7 @@ export async function purchaserCollector(purchaserParam) {
 		},
 	};
 
-	var updateParam = await dynamoClient.scan(params).promise();
+	updateParam = await dynamoClient.scan(params).promise();
 
 	updateParam.Items[0].status = 'running';
 	updateParam.Items[0].type = 'purchaser-data-task';
@@ -108,7 +110,6 @@ const getSol = async (token, offset, blockTime, fromTime) => {
 }
 
 const getCamps = async (token, num, firstSignature, secondSignature, thirdSignature, fourthSignature) => {
-	const tokenBalance = await CONNECTION.getBalance(new PublicKey(token));
 	const firstResponse = await fetch(`${MAINNET_URL_API}`, {
 		method: "POST",
 		headers: {
@@ -125,6 +126,9 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		})
 	});
 	const firstTransaction = await firstResponse.json();
+	
+	const tokenBalance = firstTransaction["result"].meta["postBalances"][0] - firstTransaction["result"].meta["preBalances"][0];
+
 	let finalOutputFromCamps = [];
 	const secondResponse = await fetch(`${MAINNET_URL_API}`, {
 		method: 'POST',
@@ -142,8 +146,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		})
 	});
 	const secondTransaction = await secondResponse.json();
-	const secondIndex = secondTransaction["result"].transaction["message"].accountKeys.indexOf(secondTransaction["result"].transaction.message.accountKeys[0]);
-	const secondBalance = secondTransaction["result"].meta["postBalances"][secondIndex] - secondTransaction["result"].meta["preBalances"][secondIndex];
+	const secondBalance = secondTransaction["result"].meta["postBalances"][0] - secondTransaction["result"].meta["preBalances"][0];
 
 	const thirdResponse = await fetch(`${MAINNET_URL_API}`, {
 		method: 'POST',
@@ -161,8 +164,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		})
 	});
 	const thirdTransaction = await thirdResponse.json();
-	const thirdIndex = thirdTransaction["result"].transaction["message"].accountKeys.indexOf(thirdTransaction["result"].transaction.message.accountKeys[0]);
-	const thirdBalance = thirdTransaction["result"].meta["postBalances"][thirdIndex] - thirdTransaction["result"].meta["preBalances"][thirdIndex];
+	const thirdBalance = thirdTransaction["result"].meta["postBalances"][0] - thirdTransaction["result"].meta["preBalances"][0];
 
 	const fourthResponse = await fetch(`${MAINNET_URL_API}`, {
 		method: 'POST',
@@ -180,8 +182,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		})
 	});
 	const fourthTransaction = await fourthResponse.json();
-	const fourthIndex = fourthTransaction["result"].transaction["message"].accountKeys.indexOf(fourthTransaction["result"].transaction.message.accountKeys[0]);
-	const fourthBalance = fourthTransaction["result"].meta["postBalances"][fourthIndex] - fourthTransaction["result"].meta["preBalances"][fourthIndex];
+	const fourthBalance = fourthTransaction["result"].meta["postBalances"][0] - fourthTransaction["result"].meta["preBalances"][0];
 
 	let detectPurchaser;
 	let balance;
@@ -189,19 +190,19 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		if (firstTransaction["result"].transaction.message.accountKeys[0] == thirdTransaction["result"].transaction.message.accountKeys[0]) {
 			if (firstTransaction["result"].transaction.message.accountKeys[0] == fourthTransaction["result"].transaction.message.accountKeys[0]) {
 			} else {
-				if (Math.abs(fourthBalance) < tokenBalance) {
+				if (Math.abs(fourthBalance) < Math.abs(tokenBalance)) {
 					detectPurchaser = fourthTransaction["result"].transaction.message.accountKeys[0];
 					balance = fourthBalance;
 				}
 			}
 		} else {
-			if (Math.abs(thirdBalance) < tokenBalance) {
+			if (Math.abs(thirdBalance) < Math.abs(tokenBalance)) {
 				detectPurchaser = thirdTransaction["result"].transaction.message.accountKeys[0];
 				balance = thirdBalance;
 			}
 		}
 	} else {
-		if (Math.abs(secondBalance) < tokenBalance) {
+		if (Math.abs(secondBalance) < Math.abs(tokenBalance)) {
 			detectPurchaser = secondTransaction["result"].transaction.message.accountKeys[0];
 			balance = secondBalance;
 		}
@@ -264,7 +265,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		}
 		_price = _buy - _sold;
 
-		if (_price < tokenBalance) {
+		if (Math.abs(_price) < Math.abs(tokenBalance)) {
 			detectPurchaser = undefined;
 		}
 	}
@@ -284,7 +285,6 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 			nftMetaData = await nftMetadtacontent.json();
 		}
 	}
-	// console.log(token, firstTransaction["result"].transaction.message.accountKeys[0], detectPurchaser ? detectPurchaser : firstTransaction["result"].transaction.message.accountKeys[0], num, firstTransaction["result"].blockTime, nftMetaData);
 
 	const array = [];
 	array.ID = new Date().getTime();
@@ -292,23 +292,26 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 	array.firstPurchaser = firstTransaction["result"].transaction.message.accountKeys[0];
 	array.detectPurchaser = detectPurchaser ? detectPurchaser : firstTransaction["result"].transaction.message.accountKeys[0];
 	array.transactions = num;
+	array.contractType = "Solana";
 	array.blockTime = firstTransaction["result"].blockTime;
+	array.price = Math.abs(tokenBalance);
 	array.nftMetaDataName = nftMetaData.name;
 	array.nftMetaDataImg = nftMetaData.image;
 	array.nftMetaData = nftMetaData;
+	array.collection = (nftMetaData.name).split('#')[0].slice(0, -1);
+	array.collectionkey = collectionKey;
 
-	addOrUpdatePurchaserInfo(array);
+	await addOrUpdateCharacter(array, 'Purchaser');
 }
-
-const addOrUpdatePurchaserInfo = async (character) => {
-	const params = {
-		TableName: PURCHASER_TABLE,
-		Item: character,
-	};
-
-	return await dynamoClient.put(params).promise();
-};
 
 function delay(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const addOrUpdateCharacter = async (character, table_name) => {
+	const params = {
+		TableName: table_name,
+		Item: character,
+	};
+	return await dynamoClient.put(params).promise();
+};
