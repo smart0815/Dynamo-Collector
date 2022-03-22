@@ -11,7 +11,6 @@ const AWS_SERVER_TABLE = 'server_status';
 const WALLET_TABLE = 'Wallet_history';
 
 export async function walletCollector(walletParams) {
-	console.log(walletParams);
 	AWS.config.update({
 		region: walletParams.region,
 		accessKeyId: walletParams.accessKeyId,
@@ -46,13 +45,9 @@ export async function walletCollector(walletParams) {
 
 	let signatureBalance;
 	let balance;
-	var number;
-	number = 0;
 
 	var finalOutput = walletParams.params;
 	for (const iterator of finalOutput) {
-		number++
-		console.log(number);
 		if (!iterator.err) {
 			for (let i = 0; i < 4; i++) {
 				try {
