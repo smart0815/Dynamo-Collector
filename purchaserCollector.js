@@ -3,14 +3,11 @@ import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
 import fetch from "node-fetch";
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 
-// const MAINNET_URL_API = "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/";
 const MAINNET_URL_API = "https://api.mainnet-beta.solana.com";
 const SOLSCAN_URL_API = "https://public-api.solscan.io	";
 
 const CONNECTION = new Connection("https://api.mainnet-beta.solana.com/");
 const milliseconds = 11000;
-const SERVER_INSTANCE_COUNT = 400;
-const PURCHASER_TABLE = 'purchaser_info';
 const AWS_SERVER_TABLE = 'server_status';
 
 var dynamoClient;
@@ -107,6 +104,20 @@ const getSol = async (token, offset, blockTime, fromTime) => {
 		}
 	});
 	return soltransaction;
+}
+
+/*
+	** Gets native metadata in descending order based on block number
+*/
+const getMetadata = async (tokenAddress, tokenId) => {
+	var getNftInfo = await fetch(`https://deep-index.moralis.io/api/v2/nft/${tokenAddress}/${tokenId}?chain=eth&format=decimal`, {
+		"method": "GET",
+		"headers": {
+			"accept": "application/json",
+			"X-API-Key": moralis_api_key
+		}
+	});
+	return getNftInfo.json();
 }
 
 const getCamps = async (token, num, firstSignature, secondSignature, thirdSignature, fourthSignature) => {
@@ -286,6 +297,22 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		}
 	}
 
+	var metadataRes;
+	for (let i = 0; i < 5; i++) {
+		try {
+			metadataRes = await getMetadata(collectionKey, token);
+			if (metadataRes.status === 429) {
+				await delay(11000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+				continue;
+			} else {
+				break;
+			}
+		} catch {
+			await delay(11000);
+			continue;
+		}
+	}
+
 	const array = [];
 	array.ID = new Date().getTime();
 	array.token = token;
@@ -300,8 +327,9 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 	array.nftMetaData = nftMetaData;
 	array.collection = (nftMetaData.name).split('#')[0].slice(0, -1);
 	array.collectionkey = collectionKey;
+	array.nftData = metadataRes;
 
-	await addOrUpdateCharacter(array, 'Purchaser');
+	await addOrUpdateCharacter(array, 'Fluf_Purchaser');
 }
 
 function delay(ms) {
