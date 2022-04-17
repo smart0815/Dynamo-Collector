@@ -278,11 +278,11 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.contractType = contractType;
 	array.blockTime = blockTime;
 	array.price = tokenBalance;
+	array.nftMetaData = metadataRes;
 	array.nftMetaDataName = nftImageName ? nftImageName : nftName + ' #' + token_id;
 	array.nftMetaDataImg = nftImage;
 	array.collection = nftName;
 	array.collectionkey = nftInfo;
-	array.nftData = metadataRes;
 
 	await addOrUpdateCharacter(array, 'Fluf_world');
 }
