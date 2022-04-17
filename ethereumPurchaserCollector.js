@@ -256,7 +256,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.collection = nftName;
 	array.collectionkey = nftInfo;
 
-	await addOrUpdateCharacter(array, 'Purchaser');
+	await addOrUpdateCharacter(array, 'Fluf_world');
 }
 
 function delay(ms) {
