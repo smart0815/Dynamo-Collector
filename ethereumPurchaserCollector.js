@@ -42,6 +42,17 @@ const getUsersHistory = async (accountKey, fromTime, toTime, offset) => {
 	return getUserHistoryInfo;
 }
 
+const getMetadata = async (tokenAddress, tokenId) => {
+	var getNftInfo = await fetch(`https://deep-index.moralis.io/api/v2/nft/${tokenAddress}/${tokenId}?chain=eth&format=decimal`, {
+		"method": "GET",
+		"headers": {
+			"accept": "application/json",
+			"X-API-Key": moralis_api_key
+		}
+	});
+	return getNftInfo.json();
+}
+
 export async function getEthereumPurchaserCollector(ethereumParams) {
 	moralis_api_key = ethereumParams.moraliskey;
 	nftInfo = ethereumParams.accountkey;
@@ -242,6 +253,22 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 		nftImage = nftUrl;
 	}
 
+	var metadataRes;
+	for (let i = 0; i < 5; i++) {
+		try {
+			metadataRes = await getMetadata(nftInfo, token_id);
+			if (metadataRes.status === 429) {
+				await delay(11000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+				continue;
+			} else {
+				break;
+			}
+		} catch {
+			await delay(11000);
+			continue;
+		}
+	}
+	
 	const array = [];
 	array.ID = new Date().getTime();
 	array.token = token_id;
@@ -255,6 +282,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.nftMetaDataImg = nftImage;
 	array.collection = nftName;
 	array.collectionkey = nftInfo;
+	array.nftData = metadataRes;
 
 	await addOrUpdateCharacter(array, 'Fluf_world');
 }
