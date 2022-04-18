@@ -13,8 +13,11 @@ const AWS_SERVER_TABLE = 'server_status';
 var dynamoClient;
 var updateParam;
 var collectionKey;
+var collectionTable;
+
 export async function purchaserCollector(purchaserParam) {
 	collectionKey = purchaserParam.collectionKey;
+	collectionTable = purchaserParam.collectionTable;
 
 	AWS.config.update({
 		region: purchaserParam.region,
@@ -298,7 +301,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 	array.collection = (nftMetaData.name).split('#')[0].slice(0, -1);
 	array.collectionkey = collectionKey;
 
-	await addOrUpdateCharacter(array, 'Fluf_Purchaser');
+	await addOrUpdateCharacter(array, collectionTable);
 }
 
 function delay(ms) {
