@@ -84,7 +84,7 @@ export async function getEthereumPurchaserCollector(ethereumParams) {
 	var finalTx = ethereumParams.params;
 
 	for (const iterator of finalTx) {
-		await getPurchaserfunc(iterator.token_id, iterator.name, iterator.token_uri, iterator.contract_type);
+		await getPurchaserfunc(iterator.token_id, iterator.name, iterator.token_uri, iterator.contract_type, iterator.metadata);
 	}
 
 	updateParam.Items[0].status = null;
@@ -98,7 +98,7 @@ export async function getEthereumPurchaserCollector(ethereumParams) {
 	await dynamoClient.put(params).promise();
 }
 
-const getPurchaserfunc = async (token_id, nftName, nftUrl, contractType) => {
+const getPurchaserfunc = async (token_id, nftName, nftUrl, contractType, metadata) => {
 	try {
 		let finalPurchaserHash = [];
 		let i = 0;
@@ -139,13 +139,13 @@ const getPurchaserfunc = async (token_id, nftName, nftUrl, contractType) => {
 		const thirdTransaction = finalPurchaserHash.slice(-3, -2).pop() ? finalPurchaserHash.slice(-3, -2).pop() : secondTransaction;
 		const fourthTransaction = finalPurchaserHash.slice(-4, -3).pop() ? finalPurchaserHash.slice(-4, -3).pop() : thirdTransaction;
 
-		await updateTransaction(token_id, nftName, nftUrl, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
+		await updateTransaction(token_id, nftName, nftUrl, metadata, finalPurchaserHash.length, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction);
 	} catch (error) {
 		console.log("Ups!! An error was caught", error);
 	}
 }
 
-const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction) => {
+const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactionLen, contractType, firstTransaction, secondTransaction, thirdTransaction, fourthTransaction) => {
 	const firstHashInfo = await getTransaction(firstTransaction.transaction_hash);
 	const secondHashInfo = await getTransaction(secondTransaction.transaction_hash);
 	const thirdHashInfo = await getTransaction(thirdTransaction.transaction_hash);
