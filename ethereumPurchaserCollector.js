@@ -5,6 +5,8 @@ import AWS from 'aws-sdk';
 var moralis_api_key;
 var nftInfo;
 var dynamoClient;
+var collectionTable;
+
 const AWS_SERVER_TABLE = 'server_status';
 const getHash = async (accountKey, num, offset) => {
 	var hash = await fetch(`https://deep-index.moralis.io/api/v2/nft/${accountKey}/${num}/transfers?chain=eth&format=decimal&offset=${offset}`, {
@@ -45,6 +47,7 @@ const getUsersHistory = async (accountKey, fromTime, toTime, offset) => {
 export async function getEthereumPurchaserCollector(ethereumParams) {
 	moralis_api_key = ethereumParams.moraliskey;
 	nftInfo = ethereumParams.accountkey;
+	collectionTable = ethereumParams.collectionTable;
 
 	AWS.config.update({
 		region: ethereumParams.region,
@@ -254,7 +257,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, transactionLen, cont
 	array.collection = nftName;
 	array.collectionkey = nftInfo;
 
-	await addOrUpdateCharacter(array, 'Fluf_world');
+	await addOrUpdateCharacter(array, collectionTable);
 }
 
 function delay(ms) {
