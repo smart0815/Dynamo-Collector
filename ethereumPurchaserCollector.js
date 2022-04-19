@@ -229,6 +229,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactio
 	}
 
 	var nftMetaData;
+	var nftMetaDataImg;
 
 	if (metadata) {
 		nftMetaData = metadata;
@@ -242,6 +243,12 @@ const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactio
 		nftMetaData = await imageData.json();
 	}
 
+	try {
+		nftMetaDataImg = JSON.parse(nftMetaData).image_small ? JSON.parse(nftMetaData).image_small : JSON.parse(nftMetaData).image;
+	} catch (error) {
+		nftMetaDataImg = nftMetaData.image_small ? nftMetaData.image_small : nftMetaData.image;
+	}
+
 	const array = [];
 	array.ID = new Date().getTime();
 	array.token = token_id;
@@ -253,7 +260,7 @@ const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactio
 	array.price = tokenBalance;
 	array.nftMetaData = nftMetaData;
 	array.nftMetaDataName = nftName + ' #' + token_id;
-	array.nftMetaDataImg = nftMetaData.image_small ? nftMetaData.image_small : nftMetaData.image;
+	array.nftMetaDataImg = nftMetaDataImg;
 	array.collection = nftName;
 	array.collectionkey = nftInfo;
 
