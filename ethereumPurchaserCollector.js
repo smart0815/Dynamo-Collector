@@ -151,24 +151,24 @@ const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactio
 	const thirdHashInfo = await getTransaction(thirdTransaction.transaction_hash);
 	const fourthHashInfo = await getTransaction(fourthTransaction.transaction_hash);
 
-	const tokenBalance = firstHashInfo.value;
+	const tokenBalance = firstHashInfo.value/firstHashInfo.logs.filter((e) => e.data == '0x').length;
 	var detectPurchaser;
 
 	if (firstHashInfo.from_address == secondHashInfo.from_address) {
 		if (firstHashInfo.from_address == thirdHashInfo.from_address) {
 			if (firstHashInfo.from_address == fourthHashInfo.from_address) {
 			} else {
-				if (Math.abs(fourthHashInfo.value) < Math.abs(tokenBalance)) {
+				if (Math.abs(fourthHashInfo.value/fourthHashInfo.logs.filter((e) => e.data == '0x').length) < Math.abs(tokenBalance)) {
 					detectPurchaser = fourthHashInfo.from_address;
 				}
 			}
 		} else {
-			if (Math.abs(thirdHashInfo.value) < Math.abs(tokenBalance)) {
+			if (Math.abs(thirdHashInfo.value/thirdHashInfo.logs.filter((e) => e.data == '0x').length) < Math.abs(tokenBalance)) {
 				detectPurchaser = thirdHashInfo.from_address;
 			}
 		}
 	} else {
-		if (Math.abs(secondHashInfo.value) < Math.abs(tokenBalance)) {
+		if (Math.abs(secondHashInfo.value/secondHashInfo.logs.filter((e) => e.data == '0x').length) < Math.abs(tokenBalance)) {
 			detectPurchaser = secondHashInfo.from_address;
 		}
 	}
@@ -217,9 +217,9 @@ const updateTransaction = async (token_id, nftName, nftUrl, metadata, transactio
 	_buy = 0;
 	for (const iterator of detectAccount) {
 		if (iterator.from_address == detectPurchaser) {
-			_buy += parseInt(iterator.value);
+			_buy += parseInt(iterator.value/iterator.logs.filter((e) => e.data == '0x').length);
 		} else {
-			_sold += parseInt(iterator.value);
+			_sold += parseInt(iterator.value/iterator.logs.filter((e) => e.data == '0x').length);
 		}
 	}
 	_price = _buy - _sold;
