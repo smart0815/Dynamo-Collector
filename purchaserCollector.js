@@ -1,4 +1,5 @@
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
+import AWS from 'aws-sdk';
 
 import fetch from "node-fetch";
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
