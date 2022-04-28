@@ -6,6 +6,7 @@ import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 
 const MAINNET_URL_API = "https://api.mainnet-beta.solana.com";
 const SOLSCAN_URL_API = "https://public-api.solscan.io	";
+let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 
 const CONNECTION = new Connection("https://api.mainnet-beta.solana.com/");
 const milliseconds = 11000;
