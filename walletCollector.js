@@ -58,7 +58,7 @@ export async function walletCollector(walletParams) {
 						},
 						body: JSON.stringify({
 							"jsonrpc": "2.0",
-							"id": 1,
+							"id": 2,
 							"method": "getTransaction",
 							"params": [
 								iterator.signature,

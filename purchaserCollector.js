@@ -119,7 +119,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		},
 		body: JSON.stringify({
 			"jsonrpc": "2.0",
-			"id": 1,
+			"id": 2,
 			"method": "getTransaction",
 			"params": [
 				firstSignature,
@@ -139,7 +139,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		},
 		body: JSON.stringify({
 			"jsonrpc": "2.0",
-			"id": 1,
+			"id": 2,
 			"method": "getTransaction",
 			"params": [
 				secondSignature,
@@ -157,7 +157,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		},
 		body: JSON.stringify({
 			"jsonrpc": "2.0",
-			"id": 1,
+			"id": 2,
 			"method": "getTransaction",
 			"params": [
 				thirdSignature,
@@ -175,7 +175,7 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 		},
 		body: JSON.stringify({
 			"jsonrpc": "2.0",
-			"id": 1,
+			"id": 2,
 			"method": "getTransaction",
 			"params": [
 				fourthSignature,
