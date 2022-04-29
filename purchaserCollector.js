@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 
 const MAINNET_URL_API = "https://api.mainnet-beta.solana.com";
-const SOLSCAN_URL_API = "https://public-api.solscan.io	";
+const SOLSCAN_URL_API = "https://public-api.solscan.io";
 let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 
 const CONNECTION = new Connection("https://api.mainnet-beta.solana.com/");
@@ -102,7 +102,7 @@ const getSignature = async (token) => {
 }
 
 const getSol = async (token, offset, blockTime, fromTime) => {
-	var soltransaction = await fetch(`${SOLSCAN_URL_API}/account/solTransfers?account=${accountKey}&fromTime=${blockTime - fromTime * 86400000}&toTime=${blockTime}&offset=${offset}&limit=50`, {
+	var soltransaction = await fetch(`${SOLSCAN_URL_API}/account/solTransfers?account=${token}&fromTime=${blockTime - fromTime * 86400000}&toTime=${blockTime}&offset=${offset}&limit=50`, {
 		method: "GET",
 		headers: {
 			'Content-Type': 'application/json'
@@ -185,7 +185,6 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 	});
 	const fourthTransaction = await fourthResponse.json();
 	const fourthBalance = fourthTransaction["result"].meta["postBalances"][0] - fourthTransaction["result"].meta["preBalances"][0];
-
 	let detectPurchaser;
 	let balance;
 	if (firstTransaction["result"].transaction.message.accountKeys[0] == secondTransaction["result"].transaction.message.accountKeys[0]) {
@@ -302,7 +301,6 @@ const getCamps = async (token, num, firstSignature, secondSignature, thirdSignat
 	array.nftMetaData = nftMetaData;
 	array.collection = (nftMetaData.name).split('#')[0].slice(0, -1);
 	array.collectionkey = collectionKey;
-
 	await addOrUpdateCharacter(array, collectionTable);
 }
 
