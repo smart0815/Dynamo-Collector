@@ -92,9 +92,11 @@ export async function walletCollector(walletParams) {
 					for (var elem of Metadata) {
 						if (elem?.data.uri) {
 							if (!elem.data.uri.includes("details.txt")) {
-								let nftMetadtacontent = await fetch(elem.data.uri);
-								console.log(elem.data.uri);
-								iterator.nftMetaData = await nftMetadtacontent.text();
+								try {
+									let nftMetadtacontent = await fetch(elem.data.uri);	
+									iterator.nftMetaData = await nftMetadtacontent.text();
+								} catch (error) {
+								} 
 							}
 						}
 						else {
