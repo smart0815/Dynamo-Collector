@@ -49,7 +49,7 @@ export async function walletCollector(walletParams) {
 	var finalOutput = walletParams.params;
 	for (const iterator of finalOutput) {
 		if (!iterator.err) {
-			for (let i = 0; i < 4; i++) {
+			for (let i = 0; i < 20; i++) {
 				try {
 					signatureBalance = await fetch(`${MAINNET_URL_API}`, {
 						method: 'POST',
