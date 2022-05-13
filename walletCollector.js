@@ -5,7 +5,7 @@ import { decodeMetadata, getMetadataAccount } from "./Metadata.service.js";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 let connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
 let milliseconds = 11000;
-const MAINNET_URL_API = "https://api.mainnet-beta.solana.com";
+const MAINNET_URL_API = ["https://api.mainnet-beta.solana.com", "https://lokidfxnwlabdq.main.genesysgo.net:8899", "https://api.metaplex.solana.com", "https://solana-api.projectserum.com", "https://solana--mainnet.datahub.figment.io/apikey/ef802cd19ef5d8638c6a6cbbcd1d3144/"];
 
 const AWS_SERVER_TABLE = 'server_status';
 const WALLET_TABLE = 'Wallet_history';
@@ -48,9 +48,15 @@ export async function walletCollector(walletParams) {
 
 	var finalOutput = walletParams.params;
 	for (const iterator of finalOutput) {
+		var mainnet_num = 0;
+
 		while (true) {
 			try {
-				signatureBalance = await fetch(`${MAINNET_URL_API}`, {
+				if (mainnet_num == 5) {
+					mainnet_num = 0;
+				}
+
+				signatureBalance = await fetch(`${MAINNET_URL_API[mainnet_num]}`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -68,12 +74,14 @@ export async function walletCollector(walletParams) {
 				balance = await signatureBalance.json();
 				if (balance.result === null) {
 					await delay(milliseconds); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
+					mainnet_num++;
 					continue;
 				} else {
 					break;
 				}
 			} catch {
 				await delay(milliseconds);
+				mainnet_num++;
 				continue;
 			}
 		}
