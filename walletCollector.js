@@ -77,9 +77,10 @@ export async function walletCollector(walletParams) {
 				continue;
 			}
 		}
-		let index;
+		var index;
 		if (balance) {
 			if (iterator.err) {
+				index = balance["result"]?.transaction["message"].accountKeys.indexOf(walletParams.address);
 				iterator.balance = balance["result"]?.meta["postBalances"][index] - balance["result"]?.meta["preBalances"][index];
 			} else {
 				if (balance["result"]?.meta["postTokenBalances"]?.length) {
