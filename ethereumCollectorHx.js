@@ -75,9 +75,9 @@ async function getEthCorrelation(accountKey) {
 	var StartBlockNum;
 
 	while (true) {
-		NftResponse = await getAccountTxs(accountKey, StartBlockNum);
-		for (let i = 0; i < 5; i++) {
+		while (true) {
 			try {
+				NftResponse = await getAccountTxs(accountKey, StartBlockNum);
 				if (NftResponse.status === 429) {
 					await delay(11000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 					continue;
@@ -109,10 +109,9 @@ async function getEthCorrelation(accountKey) {
 	let InternalTxOutput = [];
 	let InternalNftResponse;
 
-	for (let i = 0; i < 5; i++) {
+	while (true) {
 		try {
 			InternalNftResponse = await getAccountInternalTxs(accountKey, 0);
-
 			if (InternalNftResponse.status === 429) {
 				await delay(11000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 				continue;
@@ -132,9 +131,9 @@ async function getEthCorrelation(accountKey) {
 	var NFTcursor = "";
 
 	while (true) {
-		NftTxResponse = await getNftTransaction(accountKey, NFTcursor);
-		for (let i = 0; i < 5; i++) {
+		while (true) {
 			try {
+				NftTxResponse = await getNftTransaction(accountKey, NFTcursor);
 				if (NftTxResponse.status === 429) {
 					await delay(11000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
 					continue;
@@ -159,7 +158,7 @@ async function getEthCorrelation(accountKey) {
 			break;
 		}
 	}
-	var filterbycollection = NFTHx.filter((e)=>e.token_address == collectionAddress);
+	var filterbycollection = NFTHx.filter((e) => e.token_address == collectionAddress);
 	for (const iterator of filterbycollection) {
 		iterator.blockTime = (new Date(iterator.block_timestamp)).getTime();
 
