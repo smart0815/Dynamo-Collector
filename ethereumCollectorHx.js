@@ -1,7 +1,6 @@
 import axios from "axios";
 import fetch from "node-fetch";
 import AWS from 'aws-sdk';
-import { getEthCorrelation } from './Eth_wallet_transaction.js';
 
 var moralis_api_key;
 var dynamoClient;
