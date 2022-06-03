@@ -54,7 +54,7 @@ app.post('/purchaserCollector', async (req, res) => {
 	}
 });
 
-app.post('/getEthCorrelation', async (req, res) => {
+app.post('/ethereumCollectorHistories', async (req, res) => {
 	app.use(bodyParser.json());
 	app.use(bodyParser.json({ limit: '50mb' }));
 	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
