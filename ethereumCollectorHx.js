@@ -199,7 +199,7 @@ async function getEthCorrelation(accountKey) {
 			if (num > 15) {
 				num = 0;
 			}
-			balanceRes = await getBalanceInfo(accountKey, moralis_api_key_sum[num]);
+			balanceRes = await getBalanceInfo(accountKey, moralis_api_key[num]);
 			if (balanceRes.status === 429 || balanceRes.message === 'Rate limit exceeded.' || balanceRes.balance === undefined) {
 				num++;
 				await delay(5000); // Before re-trying the next loop cycle, let's wait 5 seconds (5000ms)
@@ -216,7 +216,7 @@ async function getEthCorrelation(accountKey) {
 
 	const array = [];
 	array.ID = new Date().getTime();
-	array.token = balanceRes.balance;
+	array.balance = balanceRes.balance;
 	array.nftHx = NFTHx;
 
 	await addOrUpdateCharacter(array, collectionAddress);
