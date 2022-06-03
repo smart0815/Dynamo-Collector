@@ -5,6 +5,7 @@ import AWS from 'aws-sdk';
 var moralis_api_key;
 var dynamoClient;
 var etherscan_api_key;
+var collectionField;
 var collectionAddress;
 
 const AWS_SERVER_TABLE = 'server_status';
@@ -12,7 +13,8 @@ const AWS_SERVER_TABLE = 'server_status';
 export async function getEthereumCollectorInfo(ethereumParams) {
 	moralis_api_key = ethereumParams.moraliskeyGroup;
 	etherscan_api_key = ethereumParams.etherscanApikey
-	collectionAddress = ethereumParams.address;
+	collectionAddress = ethereumParams.collectionAddress;
+	collectionField = ethereumParams.collectionField;
 
 	AWS.config.update({
 		region: ethereumParams.region,
@@ -157,8 +159,8 @@ async function getEthCorrelation(accountKey) {
 			break;
 		}
 	}
-
-	for (const iterator of NFTHx) {
+	var filterbycollection = NFTHx.filter((e)=>e.token_address == collectionAddress);
+	for (const iterator of filterbycollection) {
 		iterator.blockTime = (new Date(iterator.block_timestamp)).getTime();
 
 		var filterOutput = [];
@@ -214,14 +216,14 @@ async function getEthCorrelation(accountKey) {
 		}
 	}
 
-	const chunks = chunk(NFTHx, 200);
+	const chunks = chunk(filterbycollection, 200);
 	for (const iterator of chunks) {
 		const array = [];
 		array.ID = new Date().getTime();
-		array.balance = iterator;
-		array.nftHx = NFTHx;
+		array.balance = balanceRes.balance;
+		array.nftHx = iterator;
 
-		await addOrUpdateCharacter(array, collectionAddress);
+		await addOrUpdateCharacter(array, collectionField);
 	}
 }
 
