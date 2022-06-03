@@ -19,7 +19,7 @@ app.use(header_middleware);
 import { walletCollector } from './walletCollector.js';
 import { purchaserCollector } from './purchaserCollector.js';
 import { getEthereumPurchaserCollector } from './ethereumPurchaserCollector.js';
-import { getEthereumPurchaserCollector } from './ethereumCollectorHx.js';
+import { getEthereumCollectorInfo } from './ethereumCollectorHx.js';
 
 // const { getTransaction } = require('./wallet');
 // app.use(cors());
@@ -60,7 +60,7 @@ app.post('/ethereumCollectorHistories', async (req, res) => {
 	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 
 	try {
-		const character = await getEthereumPurchaserCollector(req.body);
+		const character = await getEthereumCollectorInfo(req.body);
 		res.json(character);
 	} catch (err) {
 		console.error(err);

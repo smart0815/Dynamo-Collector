@@ -9,7 +9,7 @@ var collectionAddress;
 
 const AWS_SERVER_TABLE = 'server_status';
 
-export async function getEthereumPurchaserCollector(ethereumParams) {
+export async function getEthereumCollectorInfo(ethereumParams) {
 	moralis_api_key = ethereumParams.moraliskeyGroup;
 	etherscan_api_key = ethereumParams.etherscanApikey
 	collectionAddress = ethereumParams.address;
