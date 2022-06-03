@@ -220,6 +220,7 @@ async function getEthCorrelation(accountKey) {
 	for (const iterator of chunks) {
 		const array = [];
 		array.ID = new Date().getTime();
+		array.walletAddress = accountKey;
 		array.balance = balanceRes.balance;
 		array.nftHx = iterator;
 
