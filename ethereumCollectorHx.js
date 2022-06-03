@@ -214,12 +214,15 @@ async function getEthCorrelation(accountKey) {
 		}
 	}
 
-	const array = [];
-	array.ID = new Date().getTime();
-	array.balance = balanceRes.balance;
-	array.nftHx = NFTHx;
+	const chunks = chunk(NFTHx, 200);
+	for (const iterator of chunks) {
+		const array = [];
+		array.ID = new Date().getTime();
+		array.balance = iterator;
+		array.nftHx = NFTHx;
 
-	await addOrUpdateCharacter(array, collectionAddress);
+		await addOrUpdateCharacter(array, collectionAddress);
+	}
 }
 
 const addOrUpdateCharacter = async (character, table_name) => {
@@ -275,4 +278,22 @@ const getBalanceInfo = async (walletAddress, moraliskey) => {
 	});
 
 	return balance.json();
+}
+
+function chunk(array, size) {
+	if (size <= 0 || !Number.isInteger(size)) {
+		throw new Error(`Expected size to be an integer greater than 0 but found ${size}`);
+	}
+	if (array.length === 0) {
+		return [];
+	}
+	const ret = new Array(Math.ceil(array.length / size));
+	let readIndex = 0;
+	let writeIndex = 0;
+	while (readIndex < array.length) {
+		ret[writeIndex] = array.slice(readIndex, readIndex + size);
+		writeIndex += 1;
+		readIndex += size;
+	}
+	return ret;
 }
